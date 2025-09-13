@@ -32,3 +32,9 @@ def test_iou_matrix_values():
 def test_xywh_to_xyxy():
     boxes = np.array([[10, 10, 4, 6]], dtype=np.float32)
     assert xywh_to_xyxy(boxes).tolist() == [[8.0, 7.0, 12.0, 13.0]]
+
+
+def test_box_exactly_at_threshold_is_kept():
+    boxes = np.array([[0, 0, 10, 10], [0, 0, 5, 10]], dtype=np.float32)
+    scores = np.array([0.9, 0.8], dtype=np.float32)
+    assert nms(boxes, scores, 0.5).tolist() == [0, 1]

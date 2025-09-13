@@ -14,5 +14,5 @@ def nms(boxes: np.ndarray, scores: np.ndarray, iou_threshold: float) -> np.ndarr
         if order.size == 1:
             break
         overlaps = iou_matrix(boxes[best:best + 1], boxes[order[1:]])[0]
-        order = order[1:][overlaps < iou_threshold]
+        order = order[1:][overlaps <= iou_threshold]
     return np.asarray(kept, dtype=np.int64)
