@@ -31,7 +31,9 @@ class OpenCVSource:
 
 def build_source(config: SourceConfig) -> FrameSource:
     if config.kind == "picamera":
-        raise NotImplementedError("picamera source is not available yet")
+        from sentinel.capture.picamera import PicameraSource
+
+        return PicameraSource(config.width, config.height)
     target = config.target
     if config.kind == "camera":
         target = int(target)
