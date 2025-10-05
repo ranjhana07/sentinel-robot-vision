@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Literal
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -23,6 +23,44 @@ class SourceConfig(BaseModel):
     queue_size: int = Field(2, ge=1)
 
 
+class TrackerConfig(BaseModel):
+    iou_threshold: float = Field(0.3, ge=0.0, le=1.0)
+    max_age: int = Field(15, ge=0)
+    min_hits: int = Field(2, ge=1)
+
+
+class ZoneRule(BaseModel):
+    name: str
+    area: tuple[float, float, float, float]
+    phrase: str
+    applies_to: Literal["any", "known", "unknown"] = "any"
+    cooldown_seconds: float | None = None
+
+    @field_validator("area")
+    @classmethod
+    def area_must_be_normalised(cls, value: tuple[float, float, float, float]):
+        x1, y1, x2, y2 = value
+        if not (0.0 <= x1 < x2 <= 1.0 and 0.0 <= y1 < y2 <= 1.0):
+            raise ValueError("zone area must be normalised (x1, y1, x2, y2) with x1 < x2 and y1 < y2")
+        return value
+
+
+class SpeechConfig(BaseModel):
+    enabled: bool = True
+    backend: Literal["pyttsx3", "piper", "console"] = "pyttsx3"
+    rate: int = 170
+    volume: float = Field(1.0, ge=0.0, le=1.0)
+    piper_binary: str = "piper"
+    piper_model: Path | None = None
+    queue_size: int = Field(8, ge=1)
+    cooldown_seconds: float = 20.0
+    unknown_cooldown_seconds: float = 45.0
+    greeting: str = "Hello {name}"
+    unknown_phrase: str = "Unknown person detected"
+    group_phrase: str = "{count} unknown people detected"
+    zones: list[ZoneRule] = []
+
+
 class LoggingConfig(BaseModel):
     directory: Path = Path("logs")
     filename: str = "robot.jsonl"
@@ -34,6 +72,8 @@ class LoggingConfig(BaseModel):
 class AppConfig(BaseModel):
     detector: DetectorConfig = DetectorConfig()
     source: SourceConfig = SourceConfig()
+    tracker: TrackerConfig = TrackerConfig()
+    speech: SpeechConfig = SpeechConfig()
     logging: LoggingConfig = LoggingConfig()
 
 

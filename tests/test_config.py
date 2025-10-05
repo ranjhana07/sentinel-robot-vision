@@ -43,3 +43,21 @@ def test_settings_read_environment(monkeypatch):
     settings = Settings()
     assert settings.llm_model == "claude-test"
     assert settings.llm_temperature == 0.2
+
+
+def test_zone_rules_are_parsed_from_default_yaml():
+    config = load_config(ROOT / "configs" / "default.yaml")
+    zone = config.speech.zones[0]
+    assert zone.name == "restricted"
+    assert zone.applies_to == "unknown"
+    assert zone.area == (0.55, 0.0, 1.0, 1.0)
+
+
+def test_zone_area_must_be_ordered(tmp_path):
+    path = tmp_path / "zones.yaml"
+    path.write_text(
+        "speech:\n  zones:\n    - name: bad\n      area: [0.8, 0.0, 0.2, 1.0]\n      phrase: hi\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValidationError):
+        load_config(path)
