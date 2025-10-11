@@ -18,3 +18,23 @@ logging:
   max_bytes: 5000000
   backup_count: 5
   robot_id: sentinel-01
+
+tracker:
+  iou_threshold: 0.3
+  max_age: 15
+  min_hits: 2
+
+speech:
+  backend: pyttsx3
+  rate: 170
+  cooldown_seconds: 20
+  unknown_cooldown_seconds: 45
+  greeting: "Hello {name}"
+  unknown_phrase: "Unknown person detected"
+  group_phrase: "{count} unknown people detected"
+  zones:
+    - name: restricted
+      area: [0.55, 0.0, 1.0, 1.0]
+      phrase: "This area is restricted. Please step back."
+      applies_to: unknown
+      cooldown_seconds: 30
