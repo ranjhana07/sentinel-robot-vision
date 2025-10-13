@@ -13,6 +13,27 @@ class QuantMode(str, Enum):
 
 
 @app.command()
+def run(
+    config: Annotated[Path, typer.Option(help="yaml config file")] = Path("configs/default.yaml"),
+    source: Annotated[Optional[str], typer.Option(help="camera index or video path override")] = None,
+    model: Annotated[Optional[Path], typer.Option(help="onnx model override")] = None,
+    display: Annotated[bool, typer.Option(help="show an overlay window")] = False,
+    max_frames: Annotated[Optional[int], typer.Option(help="stop after this many frames")] = None,
+) -> None:
+    from sentinel.config import load_config
+    from sentinel.pipeline import build_pipeline
+
+    app_config = load_config(config)
+    if source is not None:
+        app_config.source.kind = "camera" if source.isdigit() else "video"
+        app_config.source.target = int(source) if source.isdigit() else source
+    if model is not None:
+        app_config.detector.model_path = model
+    frames = build_pipeline(app_config, display=display).run(max_frames=max_frames)
+    typer.echo(f"processed {frames} frames")
+
+
+@app.command()
 def export(
     weights: Annotated[Path, typer.Argument(help="trained .pt weights")],
     output: Annotated[Optional[Path], typer.Option(help="destination .onnx path")] = None,
