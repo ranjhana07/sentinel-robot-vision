@@ -24,7 +24,18 @@ class ThreadedCapture:
             if frame is None:
                 self._ended.set()
                 break
-            self._frames.put(frame)
+            self._push_latest(frame)
+
+    def _push_latest(self, frame: np.ndarray) -> None:
+        while True:
+            try:
+                self._frames.put_nowait(frame)
+                return
+            except queue.Full:
+                try:
+                    self._frames.get_nowait()
+                except queue.Empty:
+                    continue
 
     def read(self, timeout: float = 0.5) -> np.ndarray | None:
         try:
@@ -38,5 +49,5 @@ class ThreadedCapture:
 
     def stop(self) -> None:
         self._stop.set()
-        self._thread.join()
+        self._thread.join(timeout=2.0)
         self._source.release()
