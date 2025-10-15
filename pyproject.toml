@@ -19,6 +19,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+tts = ["pyttsx3>=2.90"]
+pi = ["picamera2"]
+train = ["ultralytics>=8.1"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]
