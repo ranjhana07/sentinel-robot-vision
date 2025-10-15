@@ -1,0 +1,17 @@
+[Unit]
+Description=Sentinel robot vision
+After=network-online.target sound.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/opt/sentinel-robot-vision
+EnvironmentFile=-/opt/sentinel-robot-vision/.env
+ExecStart=/opt/sentinel-robot-vision/.venv/bin/sentinel run --config configs/default.yaml
+Restart=on-failure
+RestartSec=5
+SupplementaryGroups=audio video
+
+[Install]
+WantedBy=multi-user.target
