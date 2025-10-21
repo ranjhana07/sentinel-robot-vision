@@ -84,6 +84,19 @@ def bench(
 
 
 @app.command()
+def frames(
+    video: Annotated[Path, typer.Argument(help="video to sample")],
+    output_dir: Annotated[Path, typer.Option()] = Path("data/calibration"),
+    every: Annotated[int, typer.Option(help="keep every Nth frame")] = 15,
+    limit: Annotated[int, typer.Option()] = 200,
+) -> None:
+    from sentinel.export.frames import extract_frames
+
+    written = extract_frames(video, output_dir, every=every, limit=limit)
+    typer.echo(f"wrote {len(written)} frames to {output_dir}")
+
+
+@app.command()
 def train(
     data: Annotated[Path, typer.Option()] = Path("configs/face_dataset.yaml"),
     base_weights: Annotated[str, typer.Option()] = "yolov8n.pt",
