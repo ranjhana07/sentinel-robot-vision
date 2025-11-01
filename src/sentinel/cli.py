@@ -111,5 +111,49 @@ def train(
     typer.echo(f"best weights: {best}")
 
 
+logs_app = typer.Typer(no_args_is_help=True, help="Ingest and summarize robot logs")
+app.add_typer(logs_app, name="logs")
+
+
+@logs_app.command("ingest")
+def logs_ingest(
+    paths: Annotated[list[Path], typer.Argument(help="log files or directories (jsonl or text)")],
+    config: Annotated[Path, typer.Option()] = Path("configs/default.yaml"),
+    window_minutes: Annotated[Optional[int], typer.Option(help="chunk window override")] = None,
+) -> None:
+    from sentinel.config import load_config
+    from sentinel.rag.ingest import build_chunks
+    from sentinel.rag.store import LogStore
+
+    rag = load_config(config).rag
+    chunks = build_chunks(paths, window_minutes or rag.window_minutes, rag.max_chunk_chars)
+    store = LogStore.from_config(rag)
+    stored = store.add_chunks(chunks)
+    typer.echo(f"stored {stored} chunks, collection now holds {store.count()}")
+
+
+@logs_app.command("summarize")
+def logs_summarize(
+    since: Annotated[str, typer.Option(help="ISO time or relative value such as 2h")],
+    until: Annotated[str, typer.Option()] = "now",
+    question: Annotated[Optional[str], typer.Option(help="focus the summary on a question")] = None,
+    config: Annotated[Path, typer.Option()] = Path("configs/default.yaml"),
+) -> None:
+    from sentinel.config import Settings, load_config
+    from sentinel.rag.store import LogStore
+    from sentinel.rag.summarize import LogSummarizer, build_llm
+    from sentinel.rag.timeparse import parse_time_argument
+
+    start = parse_time_argument(since)
+    end = parse_time_argument(until)
+    if start >= end:
+        raise typer.BadParameter("--since must be earlier than --until")
+    rag = load_config(config).rag
+    summarizer = LogSummarizer(LogStore.from_config(rag), build_llm(Settings()), top_k=rag.top_k)
+    summary = summarizer.summarize(start, end, question)
+    typer.echo(summary.text)
+    typer.echo(f"\nchunks used: {len(summary.chunk_ids)}")
+
+
 if __name__ == "__main__":
     app()
