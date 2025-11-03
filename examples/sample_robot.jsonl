@@ -1,0 +1,327 @@
+{"ts":"2025-11-04T08:00:02.000+00:00","level":"info","event":"startup","robot":"sentinel-01","model":"face-yolov8n-int8.onnx"}
+{"ts":"2025-11-04T08:00:05.000+00:00","level":"info","event":"camera_open","robot":"sentinel-01","source":0,"width":640,"height":480}
+{"ts":"2025-11-04T08:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.74}
+{"ts":"2025-11-04T08:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.87}
+{"ts":"2025-11-04T08:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.31}
+{"ts":"2025-11-04T08:15:06.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":1,"identity":"Ravi","score":0.641,"zone":"entrance"}
+{"ts":"2025-11-04T08:15:07.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T08:15:39.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":1}
+{"ts":"2025-11-04T08:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.76}
+{"ts":"2025-11-04T08:23:32.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":2,"identity":"unknown","score":0.777,"zone":"entrance"}
+{"ts":"2025-11-04T08:23:33.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T08:23:58.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":2}
+{"ts":"2025-11-04T08:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.81}
+{"ts":"2025-11-04T08:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.9}
+{"ts":"2025-11-04T08:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.42}
+{"ts":"2025-11-04T08:35:43.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":3,"identity":"unknown","score":0.921,"zone":"entrance"}
+{"ts":"2025-11-04T08:35:44.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T08:35:59.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":3}
+{"ts":"2025-11-04T08:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.81}
+{"ts":"2025-11-04T08:43:13.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":4,"identity":"Meena","score":0.783,"zone":"entrance"}
+{"ts":"2025-11-04T08:43:14.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Meena","queued":true}
+{"ts":"2025-11-04T08:43:38.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":4}
+{"ts":"2025-11-04T08:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.96}
+{"ts":"2025-11-04T08:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.15}
+{"ts":"2025-11-04T08:51:11.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":5,"identity":"unknown","score":0.835,"zone":"entrance"}
+{"ts":"2025-11-04T08:51:12.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T08:51:23.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":5}
+{"ts":"2025-11-04T08:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.31}
+{"ts":"2025-11-04T08:59:37.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":6,"identity":"Asha","score":0.568,"zone":"entrance"}
+{"ts":"2025-11-04T08:59:38.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T09:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.56}
+{"ts":"2025-11-04T09:00:03.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":6}
+{"ts":"2025-11-04T09:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.31}
+{"ts":"2025-11-04T09:09:10.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":7,"identity":"Asha","score":0.585,"zone":"entrance"}
+{"ts":"2025-11-04T09:09:11.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T09:09:26.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":7}
+{"ts":"2025-11-04T09:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.17}
+{"ts":"2025-11-04T09:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.03}
+{"ts":"2025-11-04T09:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.25}
+{"ts":"2025-11-04T09:20:31.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":8,"identity":"unknown","score":0.813,"zone":"entrance"}
+{"ts":"2025-11-04T09:20:32.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T09:20:47.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":8}
+{"ts":"2025-11-04T09:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.38}
+{"ts":"2025-11-04T09:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.36}
+{"ts":"2025-11-04T09:33:33.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":9,"identity":"unknown","score":0.73,"zone":"entrance"}
+{"ts":"2025-11-04T09:33:34.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T09:34:03.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":9}
+{"ts":"2025-11-04T09:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.98}
+{"ts":"2025-11-04T09:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.94}
+{"ts":"2025-11-04T09:41:35.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":10,"identity":"Meena","score":0.578,"zone":"entrance"}
+{"ts":"2025-11-04T09:41:36.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Meena","queued":true}
+{"ts":"2025-11-04T09:41:47.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":10}
+{"ts":"2025-11-04T09:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.39}
+{"ts":"2025-11-04T09:47:10.000+00:00","level":"warning","event":"fps_drop","robot":"sentinel-01","fps":6.1,"threshold":8}
+{"ts":"2025-11-04T09:47:30.000+00:00","level":"warning","event":"fps_drop","robot":"sentinel-01","fps":4.8,"threshold":8}
+{"ts":"2025-11-04T09:47:50.000+00:00","level":"warning","event":"fps_drop","robot":"sentinel-01","fps":4.1,"threshold":8}
+{"ts":"2025-11-04T09:48:10.000+00:00","level":"warning","event":"fps_drop","robot":"sentinel-01","fps":4.4,"threshold":8}
+{"ts":"2025-11-04T09:48:30.000+00:00","level":"warning","event":"fps_drop","robot":"sentinel-01","fps":7.9,"threshold":8}
+{"ts":"2025-11-04T09:49:55.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":11,"identity":"Asha","score":0.579,"zone":"entrance"}
+{"ts":"2025-11-04T09:49:56.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T09:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.22}
+{"ts":"2025-11-04T09:50:26.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":11}
+{"ts":"2025-11-04T09:54:52.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":12,"identity":"unknown","score":0.83,"zone":"entrance"}
+{"ts":"2025-11-04T09:54:53.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T09:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.83}
+{"ts":"2025-11-04T09:55:08.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":12}
+{"ts":"2025-11-04T10:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.27}
+{"ts":"2025-11-04T10:04:14.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":13,"identity":"Ravi","score":0.892,"zone":"entrance"}
+{"ts":"2025-11-04T10:04:15.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T10:04:48.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":13}
+{"ts":"2025-11-04T10:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.43}
+{"ts":"2025-11-04T10:09:09.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":14,"identity":"Asha","score":0.787,"zone":"entrance"}
+{"ts":"2025-11-04T10:09:10.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T10:09:41.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":14}
+{"ts":"2025-11-04T10:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.49}
+{"ts":"2025-11-04T10:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.24}
+{"ts":"2025-11-04T10:15:03.000+00:00","level":"error","event":"tts_failure","robot":"sentinel-01","backend":"pyttsx3","error":"audio device busy"}
+{"ts":"2025-11-04T10:15:09.000+00:00","level":"error","event":"tts_failure","robot":"sentinel-01","backend":"pyttsx3","error":"audio device busy"}
+{"ts":"2025-11-04T10:15:15.000+00:00","level":"error","event":"tts_failure","robot":"sentinel-01","backend":"pyttsx3","error":"audio device busy"}
+{"ts":"2025-11-04T10:19:46.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":15,"identity":"Asha","score":0.58,"zone":"entrance"}
+{"ts":"2025-11-04T10:19:47.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T10:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.76}
+{"ts":"2025-11-04T10:20:01.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":15}
+{"ts":"2025-11-04T10:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.73}
+{"ts":"2025-11-04T10:28:42.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":16,"identity":"Ravi","score":0.698,"zone":"entrance"}
+{"ts":"2025-11-04T10:28:43.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T10:29:19.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":16}
+{"ts":"2025-11-04T10:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.21}
+{"ts":"2025-11-04T10:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.82}
+{"ts":"2025-11-04T10:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.97}
+{"ts":"2025-11-04T10:40:11.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":17,"identity":"unknown","score":0.582,"zone":"entrance"}
+{"ts":"2025-11-04T10:40:12.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T10:40:51.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":17}
+{"ts":"2025-11-04T10:44:30.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":18,"identity":"unknown","score":0.733,"zone":"entrance"}
+{"ts":"2025-11-04T10:44:31.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T10:44:52.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":18}
+{"ts":"2025-11-04T10:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.8}
+{"ts":"2025-11-04T10:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.99}
+{"ts":"2025-11-04T10:50:01.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":19,"identity":"unknown","score":0.801,"zone":"entrance"}
+{"ts":"2025-11-04T10:50:02.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T10:50:40.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":19}
+{"ts":"2025-11-04T10:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.75}
+{"ts":"2025-11-04T10:58:58.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":20,"identity":"Ravi","score":0.604,"zone":"entrance"}
+{"ts":"2025-11-04T10:58:59.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T10:59:18.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":20}
+{"ts":"2025-11-04T11:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.53}
+{"ts":"2025-11-04T11:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.4}
+{"ts":"2025-11-04T11:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.39}
+{"ts":"2025-11-04T11:11:08.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":21,"identity":"unknown","score":0.68,"zone":"entrance"}
+{"ts":"2025-11-04T11:11:09.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T11:11:44.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":21}
+{"ts":"2025-11-04T11:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.21}
+{"ts":"2025-11-04T11:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.05}
+{"ts":"2025-11-04T11:23:05.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":22,"identity":"Ravi","score":0.803,"zone":"entrance"}
+{"ts":"2025-11-04T11:23:06.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T11:23:25.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":22}
+{"ts":"2025-11-04T11:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.58}
+{"ts":"2025-11-04T11:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.48}
+{"ts":"2025-11-04T11:30:20.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":90,"identity":"unknown","score":0.81,"zone":"server_room"}
+{"ts":"2025-11-04T11:30:21.000+00:00","level":"warning","event":"zone_violation","robot":"sentinel-01","zone":"server_room","track":90}
+{"ts":"2025-11-04T11:30:22.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"zone:restricted","text":"This area is restricted. Please step back.","queued":true}
+{"ts":"2025-11-04T11:31:02.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":90}
+{"ts":"2025-11-04T11:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.55}
+{"ts":"2025-11-04T11:37:32.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":23,"identity":"unknown","score":0.837,"zone":"entrance"}
+{"ts":"2025-11-04T11:37:33.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T11:37:52.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":23}
+{"ts":"2025-11-04T11:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.28}
+{"ts":"2025-11-04T11:44:56.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":24,"identity":"Ravi","score":0.63,"zone":"entrance"}
+{"ts":"2025-11-04T11:44:57.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T11:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.12}
+{"ts":"2025-11-04T11:45:12.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":24}
+{"ts":"2025-11-04T11:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.68}
+{"ts":"2025-11-04T11:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.22}
+{"ts":"2025-11-04T11:56:18.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":25,"identity":"unknown","score":0.873,"zone":"entrance"}
+{"ts":"2025-11-04T11:56:19.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T11:56:30.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":25}
+{"ts":"2025-11-04T12:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.66}
+{"ts":"2025-11-04T12:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.35}
+{"ts":"2025-11-04T12:05:10.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":26,"identity":"Ravi","score":0.729,"zone":"entrance"}
+{"ts":"2025-11-04T12:05:11.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T12:05:31.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":26}
+{"ts":"2025-11-04T12:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.22}
+{"ts":"2025-11-04T12:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.2}
+{"ts":"2025-11-04T12:15:34.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":27,"identity":"unknown","score":0.738,"zone":"entrance"}
+{"ts":"2025-11-04T12:15:35.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T12:16:02.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":27}
+{"ts":"2025-11-04T12:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.45}
+{"ts":"2025-11-04T12:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.29}
+{"ts":"2025-11-04T12:29:02.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":28,"identity":"Asha","score":0.656,"zone":"entrance"}
+{"ts":"2025-11-04T12:29:03.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T12:29:12.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":28}
+{"ts":"2025-11-04T12:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.76}
+{"ts":"2025-11-04T12:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.38}
+{"ts":"2025-11-04T12:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.68}
+{"ts":"2025-11-04T12:43:47.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":29,"identity":"Ravi","score":0.667,"zone":"entrance"}
+{"ts":"2025-11-04T12:43:48.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T12:43:56.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":29}
+{"ts":"2025-11-04T12:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.29}
+{"ts":"2025-11-04T12:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.96}
+{"ts":"2025-11-04T12:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.13}
+{"ts":"2025-11-04T12:57:55.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":30,"identity":"Asha","score":0.559,"zone":"entrance"}
+{"ts":"2025-11-04T12:57:56.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T12:58:20.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":30}
+{"ts":"2025-11-04T13:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.52}
+{"ts":"2025-11-04T13:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.3}
+{"ts":"2025-11-04T13:05:44.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":31,"identity":"Asha","score":0.924,"zone":"entrance"}
+{"ts":"2025-11-04T13:05:45.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T13:05:45.000+00:00","level":"error","event":"camera_read_failed","robot":"sentinel-01","attempt":1,"device":"/dev/video0"}
+{"ts":"2025-11-04T13:05:46.000+00:00","level":"error","event":"camera_read_failed","robot":"sentinel-01","attempt":2,"device":"/dev/video0"}
+{"ts":"2025-11-04T13:05:47.000+00:00","level":"error","event":"camera_read_failed","robot":"sentinel-01","attempt":3,"device":"/dev/video0"}
+{"ts":"2025-11-04T13:05:52.000+00:00","level":"warning","event":"camera_reconnect","robot":"sentinel-01","device":"/dev/video0"}
+{"ts":"2025-11-04T13:05:55.000+00:00","level":"info","event":"camera_open","robot":"sentinel-01","source":0,"width":640,"height":480}
+{"ts":"2025-11-04T13:05:59.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":31}
+{"ts":"2025-11-04T13:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.6}
+{"ts":"2025-11-04T13:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.36}
+{"ts":"2025-11-04T13:16:50.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":32,"identity":"unknown","score":0.799,"zone":"entrance"}
+{"ts":"2025-11-04T13:16:51.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T13:17:21.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":32}
+{"ts":"2025-11-04T13:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.11}
+{"ts":"2025-11-04T13:22:33.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":33,"identity":"Ravi","score":0.647,"zone":"entrance"}
+{"ts":"2025-11-04T13:22:34.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T13:22:41.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":33}
+{"ts":"2025-11-04T13:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.34}
+{"ts":"2025-11-04T13:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.5}
+{"ts":"2025-11-04T13:34:07.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":34,"identity":"unknown","score":0.618,"zone":"entrance"}
+{"ts":"2025-11-04T13:34:08.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T13:34:32.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":34}
+{"ts":"2025-11-04T13:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.32}
+{"ts":"2025-11-04T13:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.27}
+{"ts":"2025-11-04T13:43:41.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":35,"identity":"unknown","score":0.748,"zone":"entrance"}
+{"ts":"2025-11-04T13:43:42.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T13:43:59.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":35}
+{"ts":"2025-11-04T13:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.16}
+{"ts":"2025-11-04T13:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.41}
+{"ts":"2025-11-04T13:54:35.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":36,"identity":"unknown","score":0.894,"zone":"entrance"}
+{"ts":"2025-11-04T13:54:36.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T13:54:48.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":36}
+{"ts":"2025-11-04T13:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.87}
+{"ts":"2025-11-04T14:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.74}
+{"ts":"2025-11-04T14:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.43}
+{"ts":"2025-11-04T14:05:34.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":37,"identity":"unknown","score":0.697,"zone":"entrance"}
+{"ts":"2025-11-04T14:05:35.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T14:06:10.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":37}
+{"ts":"2025-11-04T14:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.08}
+{"ts":"2025-11-04T14:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.36}
+{"ts":"2025-11-04T14:16:46.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":38,"identity":"unknown","score":0.896,"zone":"entrance"}
+{"ts":"2025-11-04T14:16:47.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T14:17:18.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":38}
+{"ts":"2025-11-04T14:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.97}
+{"ts":"2025-11-04T14:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.34}
+{"ts":"2025-11-04T14:29:22.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":39,"identity":"unknown","score":0.741,"zone":"entrance"}
+{"ts":"2025-11-04T14:29:23.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T14:29:51.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":39}
+{"ts":"2025-11-04T14:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.7}
+{"ts":"2025-11-04T14:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.46}
+{"ts":"2025-11-04T14:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.52}
+{"ts":"2025-11-04T14:40:42.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":40,"identity":"unknown","score":0.628,"zone":"entrance"}
+{"ts":"2025-11-04T14:40:43.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T14:40:57.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":40}
+{"ts":"2025-11-04T14:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.37}
+{"ts":"2025-11-04T14:47:57.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":41,"identity":"unknown","score":0.923,"zone":"entrance"}
+{"ts":"2025-11-04T14:47:58.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T14:48:24.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":41}
+{"ts":"2025-11-04T14:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.16}
+{"ts":"2025-11-04T14:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.56}
+{"ts":"2025-11-04T15:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.26}
+{"ts":"2025-11-04T15:00:47.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":42,"identity":"unknown","score":0.65,"zone":"entrance"}
+{"ts":"2025-11-04T15:00:48.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T15:00:56.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":42}
+{"ts":"2025-11-04T15:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.45}
+{"ts":"2025-11-04T15:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.67}
+{"ts":"2025-11-04T15:10:19.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":43,"identity":"Ravi","score":0.68,"zone":"entrance"}
+{"ts":"2025-11-04T15:10:20.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T15:10:53.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":43}
+{"ts":"2025-11-04T15:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.23}
+{"ts":"2025-11-04T15:18:50.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":44,"identity":"unknown","score":0.633,"zone":"entrance"}
+{"ts":"2025-11-04T15:18:51.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T15:19:02.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":44}
+{"ts":"2025-11-04T15:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.97}
+{"ts":"2025-11-04T15:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.32}
+{"ts":"2025-11-04T15:29:41.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":45,"identity":"Meena","score":0.677,"zone":"entrance"}
+{"ts":"2025-11-04T15:29:42.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Meena","queued":true}
+{"ts":"2025-11-04T15:29:57.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":45}
+{"ts":"2025-11-04T15:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.39}
+{"ts":"2025-11-04T15:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.46}
+{"ts":"2025-11-04T15:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.51}
+{"ts":"2025-11-04T15:40:12.000+00:00","level":"warning","event":"disk_low","robot":"sentinel-01","free_mb":210,"path":"/var/log/sentinel"}
+{"ts":"2025-11-04T15:40:50.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":46,"identity":"unknown","score":0.892,"zone":"entrance"}
+{"ts":"2025-11-04T15:40:51.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T15:41:26.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":46}
+{"ts":"2025-11-04T15:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.13}
+{"ts":"2025-11-04T15:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.59}
+{"ts":"2025-11-04T15:52:27.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":47,"identity":"unknown","score":0.583,"zone":"entrance"}
+{"ts":"2025-11-04T15:52:28.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T15:52:49.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":47}
+{"ts":"2025-11-04T15:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.56}
+{"ts":"2025-11-04T16:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.29}
+{"ts":"2025-11-04T16:04:00.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":48,"identity":"Meena","score":0.763,"zone":"entrance"}
+{"ts":"2025-11-04T16:04:01.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Meena","queued":true}
+{"ts":"2025-11-04T16:04:18.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":48}
+{"ts":"2025-11-04T16:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.31}
+{"ts":"2025-11-04T16:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.9}
+{"ts":"2025-11-04T16:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.49}
+{"ts":"2025-11-04T16:16:32.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":49,"identity":"unknown","score":0.763,"zone":"entrance"}
+{"ts":"2025-11-04T16:16:33.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T16:16:59.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":49}
+{"ts":"2025-11-04T16:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.92}
+{"ts":"2025-11-04T16:20:05.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":95,"identity":"unknown","score":0.74,"zone":"entrance"}
+{"ts":"2025-11-04T16:20:09.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":96,"identity":"unknown","score":0.74,"zone":"entrance"}
+{"ts":"2025-11-04T16:20:14.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":97,"identity":"unknown","score":0.74,"zone":"entrance"}
+{"ts":"2025-11-04T16:20:16.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"3 unknown people detected","queued":true}
+{"ts":"2025-11-04T16:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.65}
+{"ts":"2025-11-04T16:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.74}
+{"ts":"2025-11-04T16:30:56.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":50,"identity":"unknown","score":0.881,"zone":"entrance"}
+{"ts":"2025-11-04T16:30:57.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T16:31:17.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":50}
+{"ts":"2025-11-04T16:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.35}
+{"ts":"2025-11-04T16:39:50.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":51,"identity":"Meena","score":0.749,"zone":"entrance"}
+{"ts":"2025-11-04T16:39:51.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Meena","queued":true}
+{"ts":"2025-11-04T16:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.78}
+{"ts":"2025-11-04T16:40:29.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":51}
+{"ts":"2025-11-04T16:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.89}
+{"ts":"2025-11-04T16:47:16.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":52,"identity":"Meena","score":0.552,"zone":"entrance"}
+{"ts":"2025-11-04T16:47:17.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Meena","queued":true}
+{"ts":"2025-11-04T16:47:48.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":52}
+{"ts":"2025-11-04T16:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.24}
+{"ts":"2025-11-04T16:51:50.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":53,"identity":"unknown","score":0.746,"zone":"entrance"}
+{"ts":"2025-11-04T16:51:51.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T16:52:23.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":53}
+{"ts":"2025-11-04T16:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.42}
+{"ts":"2025-11-04T17:00:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.38}
+{"ts":"2025-11-04T17:04:41.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":54,"identity":"unknown","score":0.596,"zone":"entrance"}
+{"ts":"2025-11-04T17:04:42.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T17:04:54.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":54}
+{"ts":"2025-11-04T17:05:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.29}
+{"ts":"2025-11-04T17:05:00.000+00:00","level":"warning","event":"thermal_throttle","robot":"sentinel-01","cpu_temp_c":79.0}
+{"ts":"2025-11-04T17:05:30.000+00:00","level":"warning","event":"thermal_throttle","robot":"sentinel-01","cpu_temp_c":82.5}
+{"ts":"2025-11-04T17:06:00.000+00:00","level":"warning","event":"thermal_throttle","robot":"sentinel-01","cpu_temp_c":83.1}
+{"ts":"2025-11-04T17:10:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.18}
+{"ts":"2025-11-04T17:10:45.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":55,"identity":"unknown","score":0.724,"zone":"entrance"}
+{"ts":"2025-11-04T17:10:46.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T17:11:18.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":55}
+{"ts":"2025-11-04T17:15:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.5}
+{"ts":"2025-11-04T17:19:00.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":56,"identity":"Asha","score":0.679,"zone":"entrance"}
+{"ts":"2025-11-04T17:19:01.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Asha","queued":true}
+{"ts":"2025-11-04T17:19:38.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":56}
+{"ts":"2025-11-04T17:20:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.43}
+{"ts":"2025-11-04T17:25:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.09}
+{"ts":"2025-11-04T17:30:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.33}
+{"ts":"2025-11-04T17:31:20.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":57,"identity":"Ravi","score":0.785,"zone":"entrance"}
+{"ts":"2025-11-04T17:31:21.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T17:31:44.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":57}
+{"ts":"2025-11-04T17:35:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.44}
+{"ts":"2025-11-04T17:38:04.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":58,"identity":"unknown","score":0.559,"zone":"entrance"}
+{"ts":"2025-11-04T17:38:05.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"unknown","text":"Unknown person detected","queued":true}
+{"ts":"2025-11-04T17:38:24.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":58}
+{"ts":"2025-11-04T17:40:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.34}
+{"ts":"2025-11-04T17:44:18.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":59,"identity":"Ravi","score":0.672,"zone":"entrance"}
+{"ts":"2025-11-04T17:44:19.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T17:44:48.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":59}
+{"ts":"2025-11-04T17:45:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":10.26}
+{"ts":"2025-11-04T17:50:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.92}
+{"ts":"2025-11-04T17:51:57.000+00:00","level":"info","event":"face_detected","robot":"sentinel-01","track":60,"identity":"Ravi","score":0.828,"zone":"entrance"}
+{"ts":"2025-11-04T17:51:58.000+00:00","level":"info","event":"speech","robot":"sentinel-01","kind":"greeting","text":"Hello Ravi","queued":true}
+{"ts":"2025-11-04T17:52:12.000+00:00","level":"info","event":"face_lost","robot":"sentinel-01","track":60}
+{"ts":"2025-11-04T17:55:00.000+00:00","level":"info","event":"fps","robot":"sentinel-01","fps":9.71}
+{"ts":"2025-11-04T18:00:01.000+00:00","level":"info","event":"shutdown","robot":"sentinel-01","frames":351204}

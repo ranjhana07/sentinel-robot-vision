@@ -9,7 +9,8 @@ KNOWN_NAMES = ["Asha", "Ravi", "Meena"]
 
 
 def at(hour: int, minute: int, second: int = 0) -> datetime:
-    return DAY.replace(hour=hour, minute=minute, second=second)
+    midnight = DAY.replace(hour=0, minute=0, second=0)
+    return midnight + timedelta(hours=hour, minutes=minute, seconds=second)
 
 
 def record(stamp: datetime, level: str, event: str, **fields) -> dict:
