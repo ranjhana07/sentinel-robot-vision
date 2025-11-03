@@ -89,7 +89,8 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=11)
     args = parser.parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    with open(args.output, "w", encoding="utf-8") as handle:
+    with open(args.output, "w", encoding="utf-8", newline="
+") as handle:
         for item in build(args.seed):
             handle.write(json.dumps(item, separators=(",", ":")) + "\n")
 
