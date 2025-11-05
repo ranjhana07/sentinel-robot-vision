@@ -68,3 +68,77 @@ def summarise_report(rows: Sequence[dict]) -> dict:
         "hit_rate": sum(1 for row in rows if row["hit"]) / len(rows),
         "mean_coverage": sum(row["coverage"] for row in rows) / len(rows),
     }
+
+
+JUDGE_PROMPT = (
+    "You grade answers to questions about robot logs. Compare the candidate answer with the reference. "
+    "Score 1 to 5: 5 means every fact in the reference is present and correct, 3 means the main point is "
+    "right but details are missing, 1 means wrong or unsupported.\n\n"
+    "Question: {question}\n\nReference: {reference}\n\nCandidate: {candidate}"
+)
+
+
+def build_judge(llm):
+    from pydantic import BaseModel, Field
+
+    class Verdict(BaseModel):
+        score: int = Field(ge=1, le=5)
+        reasoning: str
+
+    return llm.with_structured_output(Verdict)
+
+
+def make_judge_evaluator(judge):
+    def judge_correctness(inputs: dict, outputs: dict, reference_outputs: dict) -> dict:
+        verdict = judge.invoke(
+            JUDGE_PROMPT.format(
+                question=inputs["question"],
+                reference=reference_outputs["reference"],
+                candidate=outputs["answer"],
+            )
+        )
+        return {"key": "judge_correctness", "score": (verdict.score - 1) / 4, "comment": verdict.reasoning}
+
+    return judge_correctness
+
+
+def retrieval_evaluator(inputs: dict, outputs: dict, reference_outputs: dict) -> dict:
+    coverage = mention_coverage(outputs.get("context", ""), reference_outputs.get("must_mention", []))
+    return {"key": "retrieval_coverage", "score": coverage}
+
+
+def ensure_dataset(client, name: str, examples: Sequence[EvalExample]):
+    if client.has_dataset(dataset_name=name):
+        return client.read_dataset(dataset_name=name)
+    dataset = client.create_dataset(name, description="robot log question and reference pairs")
+    client.create_examples(
+        dataset_id=dataset.id,
+        inputs=[{"question": e.question, "since": e.since, "until": e.until} for e in examples],
+        outputs=[{"reference": e.reference, "must_mention": list(e.must_mention)} for e in examples],
+    )
+    return dataset
+
+
+def run_langsmith_evaluation(summarizer, judge_llm, examples: Sequence[EvalExample], dataset_name: str, prefix: str):
+    from langsmith import Client
+    from langsmith.evaluation import evaluate
+
+    from sentinel.rag.summarize import build_context
+
+    client = Client()
+    ensure_dataset(client, dataset_name, examples)
+
+    def target(inputs: dict) -> dict:
+        since = parse_time_argument(inputs["since"])
+        until = parse_time_argument(inputs["until"])
+        chunks = summarizer.retrieve(since, until, inputs["question"])
+        summary = summarizer.summarize(since, until, inputs["question"])
+        return {"answer": summary.text, "context": build_context(chunks)}
+
+    return evaluate(
+        target,
+        data=dataset_name,
+        evaluators=[retrieval_evaluator, make_judge_evaluator(build_judge(judge_llm))],
+        experiment_prefix=prefix,
+        max_concurrency=2,
+    )
