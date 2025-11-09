@@ -1,7 +1,7 @@
 PYTHON ?= python
 CONFIG ?= configs/default.yaml
 
-.PHONY: install dev test export quantize bench run clean
+.PHONY: install dev test export quantize bench run eval clean
 
 install:
 	$(PYTHON) -m pip install -e .
@@ -27,3 +27,6 @@ run:
 clean:
 	rm -rf build dist .pytest_cache reports
 	find . -name __pycache__ -type d -prune -exec rm -rf {} +
+
+eval:
+	$(PYTHON) scripts/evaluate_logs.py --mode retrieval

@@ -38,3 +38,11 @@ speech:
       phrase: "This area is restricted. Please step back."
       applies_to: unknown
       cooldown_seconds: 30
+
+rag:
+  persist_dir: data/chroma
+  collection: robot_logs
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  window_minutes: 10
+  max_chunk_chars: 3000
+  top_k: 6

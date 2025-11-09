@@ -69,11 +69,21 @@ class LoggingConfig(BaseModel):
     robot_id: str = "sentinel-01"
 
 
+class RagConfig(BaseModel):
+    persist_dir: Path = Path("data/chroma")
+    collection: str = "robot_logs"
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    window_minutes: int = Field(10, ge=1)
+    max_chunk_chars: int = Field(3000, ge=200)
+    top_k: int = Field(6, ge=1)
+
+
 class AppConfig(BaseModel):
     detector: DetectorConfig = DetectorConfig()
     source: SourceConfig = SourceConfig()
     tracker: TrackerConfig = TrackerConfig()
     speech: SpeechConfig = SpeechConfig()
+    rag: RagConfig = RagConfig()
     logging: LoggingConfig = LoggingConfig()
 
 
