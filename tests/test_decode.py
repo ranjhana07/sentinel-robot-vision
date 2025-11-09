@@ -46,3 +46,13 @@ def test_max_detections_is_respected(identity_meta):
     rows = [(20 + 30 * i, 50, 10, 10, 0.9 - i * 0.01) for i in range(10)]
     detections = decode_yolov8(make_output(rows), identity_meta, 0.35, 0.45, max_detections=3)
     assert len(detections) == 3
+
+
+def test_boxes_are_clipped_to_frame_on_non_square_input():
+    meta = LetterboxMeta(scale=0.5, pad_left=0, pad_top=52, original_height=300, original_width=800)
+    output = make_output([(380, 150, 100, 400, 0.9)])
+    box = decode_yolov8(output, meta, 0.35, 0.45)[0].box
+    assert box[0] == pytest.approx(660.0)
+    assert box[2] == 800.0
+    assert box[1] == 0.0
+    assert box[3] == 300.0

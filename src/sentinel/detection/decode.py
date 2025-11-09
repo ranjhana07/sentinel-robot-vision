@@ -11,8 +11,8 @@ def scale_boxes(boxes: np.ndarray, meta: LetterboxMeta) -> np.ndarray:
     scaled[:, [0, 2]] -= meta.pad_left
     scaled[:, [1, 3]] -= meta.pad_top
     scaled /= meta.scale
-    scaled[:, [0, 2]] = scaled[:, [0, 2]].clip(0, meta.original_height)
-    scaled[:, [1, 3]] = scaled[:, [1, 3]].clip(0, meta.original_width)
+    scaled[:, [0, 2]] = scaled[:, [0, 2]].clip(0, meta.original_width)
+    scaled[:, [1, 3]] = scaled[:, [1, 3]].clip(0, meta.original_height)
     return scaled
 
 
