@@ -49,3 +49,15 @@ python -m pytest
 ```
 
 The tests cover pure logic only and need no model weights, camera or network.
+
+## Log summaries
+
+Robot events go to `logs/robot.jsonl` as one JSON object per line, rotated by size. To search and summarize them:
+
+```
+sentinel logs ingest logs/ examples/sample_robot.jsonl
+sentinel logs summarize --since 2025-11-04T09:00:00Z --until 2025-11-04T12:00:00Z
+sentinel logs summarize --since 6h --question "Were there any camera failures?"
+```
+
+Ingest parses JSONL or plain `timestamp LEVEL message` lines, groups them into time windows, embeds each window with sentence-transformers and stores it in ChromaDB. Summaries retrieve the windows closest to the question inside the requested range and hand them to the LLM through LangChain. The model is chosen with `SENTINEL_LLM_PROVIDER` and `SENTINEL_LLM_MODEL`; the default is `claude-sonnet-5-5` through `langchain-anthropic`, which needs `ANTHROPIC_API_KEY`.
