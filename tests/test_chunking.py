@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from sentinel.rag.chunking import chunk_by_window, format_record, split_lines, window_start
+from sentinel.rag.chunking import chunk_by_window, format_record, split_pairs, window_start
 from sentinel.rag.parsing import LogRecord
 
 
@@ -46,8 +46,15 @@ def test_oversized_window_is_split_into_parts():
     assert all(len(c.text) <= 300 for c in chunks)
 
 
-def test_split_lines_keeps_long_single_line():
-    assert split_lines(["a" * 50], 10) == [["a" * 50]]
+def test_split_pairs_keeps_long_single_line():
+    assert split_pairs([("a" * 50, "info")], 10) == [[("a" * 50, "info")]]
+
+
+def test_severity_counts_are_per_part_when_window_splits():
+    records = [record(1, second=s, level="error", event="x" * 40) for s in range(5)]
+    records += [record(2, second=s, level="info", event="y" * 40) for s in range(20)]
+    chunks = chunk_by_window(records, timedelta(minutes=10), max_chars=300)
+    assert sum(c.error_count for c in chunks) == 5
 
 
 def test_metadata_has_epoch_bounds_for_filtering():

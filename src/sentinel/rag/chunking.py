@@ -41,15 +41,15 @@ def window_start(timestamp: datetime, window: timedelta) -> datetime:
     return datetime.fromtimestamp(bucket * seconds, tz=timezone.utc)
 
 
-def split_lines(lines: list[str], max_chars: int) -> list[list[str]]:
-    parts: list[list[str]] = [[]]
+def split_pairs(pairs: list[tuple[str, str]], max_chars: int) -> list[list[tuple[str, str]]]:
+    parts: list[list[tuple[str, str]]] = [[]]
     size = 0
-    for line in lines:
-        if parts[-1] and size + len(line) + 1 > max_chars:
+    for pair in pairs:
+        if parts[-1] and size + len(pair[0]) + 1 > max_chars:
             parts.append([])
             size = 0
-        parts[-1].append(line)
-        size += len(line) + 1
+        parts[-1].append(pair)
+        size += len(pair[0]) + 1
     return parts
 
 
@@ -62,16 +62,18 @@ def chunk_by_window(
     chunks: list[LogChunk] = []
     for start, group in groupby(ordered, key=lambda record: window_start(record.timestamp, window)):
         members = list(group)
-        for part, lines in enumerate(split_lines([format_record(r) for r in members], max_chars)):
+        pairs = [(format_record(r), r.level) for r in members]
+        for part, group in enumerate(split_pairs(pairs, max_chars)):
+            levels = [level for _, level in group]
             chunks.append(
                 LogChunk(
                     chunk_id=f"{start:%Y%m%dT%H%M%S}-{part}",
                     start=start,
                     end=start + window,
-                    text="\n".join(lines),
-                    record_count=len(lines),
-                    error_count=sum(1 for r in members if r.level == "error"),
-                    warning_count=sum(1 for r in members if r.level == "warning"),
+                    text="\n".join(line for line, _ in group),
+                    record_count=len(group),
+                    error_count=levels.count("error"),
+                    warning_count=levels.count("warning"),
                 )
             )
     return chunks
