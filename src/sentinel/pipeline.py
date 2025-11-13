@@ -40,7 +40,11 @@ class Pipeline:
         self._stop.set()
 
     def run(self, max_frames: int | None = None) -> int:
-        capture = ThreadedCapture(self.source, self.config.source.queue_size).start()
+        capture = ThreadedCapture(
+            self.source,
+            self.config.source.queue_size,
+            drop_stale=self.config.source.kind != "video",
+        ).start()
         if self.worker is not None:
             self.worker.start()
         meter = FpsMeter()

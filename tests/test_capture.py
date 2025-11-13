@@ -54,3 +54,16 @@ def test_finite_source_reports_exhausted_after_drain():
     capture.stop()
     assert seen == 2
     assert capture.exhausted
+
+
+def test_blocking_mode_keeps_every_frame():
+    capture = ThreadedCapture(CountingSource(total=6), queue_size=1, drop_stale=False).start()
+    seen = []
+    for _ in range(100):
+        frame = capture.read(timeout=0.1)
+        if frame is not None:
+            seen.append(int(frame[0, 0, 0]))
+        if capture.exhausted:
+            break
+    capture.stop()
+    assert seen == [1, 2, 3, 4, 5, 6]
