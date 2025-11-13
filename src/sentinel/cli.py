@@ -1,3 +1,4 @@
+import signal
 from enum import Enum
 from pathlib import Path
 from typing import Annotated, Optional
@@ -29,7 +30,10 @@ def run(
         app_config.source.target = int(source) if source.isdigit() else source
     if model is not None:
         app_config.detector.model_path = model
-    frames = build_pipeline(app_config, display=display).run(max_frames=max_frames)
+    pipeline = build_pipeline(app_config, display=display)
+    for signum in (signal.SIGINT, signal.SIGTERM):
+        signal.signal(signum, lambda *_: pipeline.request_stop())
+    frames = pipeline.run(max_frames=max_frames)
     typer.echo(f"processed {frames} frames")
 
 

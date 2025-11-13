@@ -1,6 +1,7 @@
 import logging
+import threading
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import cv2
 
@@ -33,6 +34,10 @@ class Pipeline:
     robot_log: RobotLogger
     resolver: IdentityResolver
     display: bool = False
+    _stop: threading.Event = field(default_factory=threading.Event)
+
+    def request_stop(self) -> None:
+        self._stop.set()
 
     def run(self, max_frames: int | None = None) -> int:
         capture = ThreadedCapture(self.source, self.config.source.queue_size).start()
@@ -43,7 +48,7 @@ class Pipeline:
         last_fps_log = time.monotonic()
         self.robot_log.log("startup", model=str(self.config.detector.model_path))
         try:
-            while max_frames is None or frames < max_frames:
+            while not self._stop.is_set() and (max_frames is None or frames < max_frames):
                 frame = capture.read(timeout=0.5)
                 if frame is None:
                     if capture.exhausted:
