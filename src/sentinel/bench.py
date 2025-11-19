@@ -59,6 +59,36 @@ def benchmark_model(
     )
 
 
+def benchmark_pytorch(
+    weights_path: Path | str,
+    input_size: int = 416,
+    runs: int = 100,
+    warmup: int = 10,
+    threads: int = 4,
+) -> BenchResult:
+    import torch
+    from ultralytics import YOLO
+
+    path = Path(weights_path)
+    torch.set_num_threads(threads)
+    network = YOLO(str(path)).model.float().eval()
+    sample = torch.rand(1, 3, input_size, input_size)
+    with torch.inference_mode():
+        for _ in range(warmup):
+            network(sample)
+        timings = []
+        for _ in range(runs):
+            started = time.perf_counter()
+            network(sample)
+            timings.append((time.perf_counter() - started) * 1000.0)
+    return BenchResult(
+        name=f"{path.name} (pytorch)",
+        size_mb=path.stat().st_size / 1e6,
+        runs=runs,
+        **latency_stats(timings),
+    )
+
+
 def render_markdown(results: Sequence[BenchResult]) -> str:
     lines = [
         "| model | size (MB) | mean (ms) | p50 (ms) | p95 (ms) | FPS | speedup |",

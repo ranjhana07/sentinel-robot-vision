@@ -72,16 +72,20 @@ def quantize(
 
 @app.command()
 def bench(
-    models: Annotated[list[Path], typer.Argument(help="models to compare, baseline first")],
+    models: Annotated[list[Path], typer.Argument(help="onnx models to compare, baseline first")],
+    pytorch: Annotated[Optional[Path], typer.Option(help=".pt weights to add as the first row")] = None,
     runs: Annotated[int, typer.Option()] = 100,
     warmup: Annotated[int, typer.Option()] = 10,
     image_size: Annotated[int, typer.Option()] = 416,
     threads: Annotated[int, typer.Option()] = 4,
     report_dir: Annotated[Path, typer.Option()] = Path("reports"),
 ) -> None:
-    from sentinel.bench import benchmark_model, render_markdown, write_reports
+    from sentinel.bench import benchmark_model, benchmark_pytorch, render_markdown, write_reports
 
-    results = [benchmark_model(path, image_size, runs, warmup, threads) for path in models]
+    results = []
+    if pytorch is not None:
+        results.append(benchmark_pytorch(pytorch, image_size, runs, warmup, threads))
+    results.extend(benchmark_model(path, image_size, runs, warmup, threads) for path in models)
     typer.echo(render_markdown(results))
     markdown_path, csv_path = write_reports(results, report_dir)
     typer.echo(f"wrote {markdown_path} and {csv_path}")
