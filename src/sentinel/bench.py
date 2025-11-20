@@ -1,4 +1,5 @@
 import csv
+import json
 import time
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
@@ -7,6 +8,7 @@ from typing import Sequence
 import numpy as np
 
 from sentinel.detection.onnx_engine import build_session
+from sentinel.sysinfo import environment_info
 
 
 @dataclass(frozen=True)
@@ -112,11 +114,32 @@ def write_csv(results: Sequence[BenchResult], path: Path | str) -> None:
             writer.writerow(asdict(result))
 
 
-def write_reports(results: Sequence[BenchResult], directory: Path | str) -> tuple[Path, Path]:
+def write_json(
+    results: Sequence[BenchResult],
+    path: Path | str,
+    settings: dict[str, int | str],
+    environment: dict[str, str | int],
+) -> None:
+    payload = {
+        "environment": environment,
+        "settings": settings,
+        "results": [asdict(result) for result in results],
+    }
+    Path(path).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def write_reports(
+    results: Sequence[BenchResult],
+    directory: Path | str,
+    settings: dict[str, int | str] | None = None,
+    stem: str = "benchmark",
+) -> tuple[Path, Path, Path]:
     folder = Path(directory)
     folder.mkdir(parents=True, exist_ok=True)
-    markdown_path = folder / "benchmark.md"
-    csv_path = folder / "benchmark.csv"
+    markdown_path = folder / f"{stem}.md"
+    csv_path = folder / f"{stem}.csv"
+    json_path = folder / f"{stem}.json"
     markdown_path.write_text(render_markdown(results), encoding="utf-8")
     write_csv(results, csv_path)
-    return markdown_path, csv_path
+    write_json(results, json_path, settings or {}, environment_info())
+    return markdown_path, csv_path, json_path

@@ -79,6 +79,7 @@ def bench(
     image_size: Annotated[int, typer.Option()] = 416,
     threads: Annotated[int, typer.Option()] = 4,
     report_dir: Annotated[Path, typer.Option()] = Path("reports"),
+    stem: Annotated[str, typer.Option(help="report file name without extension")] = "benchmark",
 ) -> None:
     from sentinel.bench import benchmark_model, benchmark_pytorch, render_markdown, write_reports
 
@@ -87,8 +88,9 @@ def bench(
         results.append(benchmark_pytorch(pytorch, image_size, runs, warmup, threads))
     results.extend(benchmark_model(path, image_size, runs, warmup, threads) for path in models)
     typer.echo(render_markdown(results))
-    markdown_path, csv_path = write_reports(results, report_dir)
-    typer.echo(f"wrote {markdown_path} and {csv_path}")
+    settings = {"image_size": image_size, "runs": runs, "warmup": warmup, "threads": threads}
+    paths = write_reports(results, report_dir, settings, stem)
+    typer.echo("wrote " + ", ".join(str(path) for path in paths))
 
 
 @app.command()
