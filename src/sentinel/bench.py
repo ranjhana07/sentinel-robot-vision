@@ -1,4 +1,5 @@
 import csv
+import json
 import time
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
@@ -7,6 +8,7 @@ from typing import Sequence
 import numpy as np
 
 from sentinel.detection.onnx_engine import build_session
+from sentinel.sysinfo import environment_info
 
 
 @dataclass(frozen=True)
@@ -59,6 +61,36 @@ def benchmark_model(
     )
 
 
+def benchmark_pytorch(
+    weights_path: Path | str,
+    input_size: int = 416,
+    runs: int = 100,
+    warmup: int = 10,
+    threads: int = 4,
+) -> BenchResult:
+    import torch
+    from ultralytics import YOLO
+
+    path = Path(weights_path)
+    torch.set_num_threads(threads)
+    network = YOLO(str(path)).model.float().eval()
+    sample = torch.rand(1, 3, input_size, input_size)
+    with torch.inference_mode():
+        for _ in range(warmup):
+            network(sample)
+        timings = []
+        for _ in range(runs):
+            started = time.perf_counter()
+            network(sample)
+            timings.append((time.perf_counter() - started) * 1000.0)
+    return BenchResult(
+        name=f"{path.name} (pytorch)",
+        size_mb=path.stat().st_size / 1e6,
+        runs=runs,
+        **latency_stats(timings),
+    )
+
+
 def render_markdown(results: Sequence[BenchResult]) -> str:
     lines = [
         "| model | size (MB) | mean (ms) | p50 (ms) | p95 (ms) | FPS | speedup |",
@@ -82,11 +114,32 @@ def write_csv(results: Sequence[BenchResult], path: Path | str) -> None:
             writer.writerow(asdict(result))
 
 
-def write_reports(results: Sequence[BenchResult], directory: Path | str) -> tuple[Path, Path]:
+def write_json(
+    results: Sequence[BenchResult],
+    path: Path | str,
+    settings: dict[str, int | str],
+    environment: dict[str, str | int],
+) -> None:
+    payload = {
+        "environment": environment,
+        "settings": settings,
+        "results": [asdict(result) for result in results],
+    }
+    Path(path).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def write_reports(
+    results: Sequence[BenchResult],
+    directory: Path | str,
+    settings: dict[str, int | str] | None = None,
+    stem: str = "benchmark",
+) -> tuple[Path, Path, Path]:
     folder = Path(directory)
     folder.mkdir(parents=True, exist_ok=True)
-    markdown_path = folder / "benchmark.md"
-    csv_path = folder / "benchmark.csv"
+    markdown_path = folder / f"{stem}.md"
+    csv_path = folder / f"{stem}.csv"
+    json_path = folder / f"{stem}.json"
     markdown_path.write_text(render_markdown(results), encoding="utf-8")
     write_csv(results, csv_path)
-    return markdown_path, csv_path
+    write_json(results, json_path, settings or {}, environment_info())
+    return markdown_path, csv_path, json_path

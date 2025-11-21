@@ -1,4 +1,5 @@
 import csv
+import json
 
 import numpy as np
 import onnx
@@ -45,8 +46,15 @@ def test_markdown_reports_speedup_against_first_row():
     assert rows[3].endswith("| 2.00x |")
 
 
-def test_write_reports_creates_both_files(tmp_path):
-    markdown_path, csv_path = write_reports([make_result("a.onnx", 8.0)], tmp_path / "out")
+def test_write_reports_creates_all_files(tmp_path):
+    markdown_path, csv_path, json_path = write_reports(
+        [make_result("a.onnx", 8.0)], tmp_path / "out", {"threads": 4}, stem="run"
+    )
+    payload = json.loads(json_path.read_text(encoding="utf-8"))
+    assert payload["settings"] == {"threads": 4}
+    assert payload["environment"]["logical_cores"] >= 1
+    assert payload["results"][0]["name"] == "a.onnx"
+    assert markdown_path.name == "run.md"
     assert markdown_path.read_text(encoding="utf-8").count("a.onnx") == 1
     with open(csv_path, newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
