@@ -43,3 +43,41 @@ def match_detections(
         ious.append(overlap)
         deltas.append(abs(reference[ref_index].score - candidate[cand_index].score))
     return MatchResult(len(ious), len(reference), len(candidate), tuple(ious), tuple(deltas))
+
+
+@dataclass(frozen=True)
+class AgreementSummary:
+    images: int
+    reference_faces: int
+    candidate_faces: int
+    matched_faces: int
+    recall: float
+    precision: float
+    mean_iou: float
+    mean_score_delta: float
+
+
+def summarise_matches(results: Sequence[MatchResult]) -> AgreementSummary:
+    reference_faces = sum(r.reference_count for r in results)
+    candidate_faces = sum(r.candidate_count for r in results)
+    matched = sum(r.matched for r in results)
+    all_ious = [value for r in results for value in r.ious]
+    all_deltas = [value for r in results for value in r.score_deltas]
+    return AgreementSummary(
+        images=len(results),
+        reference_faces=reference_faces,
+        candidate_faces=candidate_faces,
+        matched_faces=matched,
+        recall=matched / reference_faces if reference_faces else 1.0,
+        precision=matched / candidate_faces if candidate_faces else 1.0,
+        mean_iou=float(np.mean(all_ious)) if all_ious else 0.0,
+        mean_score_delta=float(np.mean(all_deltas)) if all_deltas else 0.0,
+    )
+
+
+def compare_detectors(reference, candidate, images: Sequence[np.ndarray], iou_threshold: float = 0.5) -> AgreementSummary:
+    results = [
+        match_detections(reference.detect(image), candidate.detect(image), iou_threshold)
+        for image in images
+    ]
+    return summarise_matches(results)

@@ -35,3 +35,43 @@ def test_score_delta_is_absolute_difference():
 def test_empty_inputs():
     assert match_detections([], [det(0, 0)]).matched == 0
     assert match_detections([det(0, 0)], []).matched == 0
+
+
+class FixedDetector:
+    def __init__(self, detections):
+        self._detections = detections
+
+    def detect(self, image):
+        return list(self._detections)
+
+
+def test_summary_aggregates_across_images():
+    from sentinel.export.agreement import MatchResult, summarise_matches
+
+    summary = summarise_matches(
+        [MatchResult(2, 2, 3, (0.9, 0.8), (0.1, 0.1)), MatchResult(0, 1, 0, (), ())]
+    )
+    assert summary.images == 2
+    assert summary.recall == pytest.approx(2 / 3)
+    assert summary.precision == pytest.approx(2 / 3)
+    assert summary.mean_iou == pytest.approx(0.85)
+
+
+def test_compare_detectors_runs_both_on_every_image():
+    from sentinel.export.agreement import compare_detectors
+
+    summary = compare_detectors(
+        FixedDetector([det(0, 0)]), FixedDetector([det(1, 1), det(300, 300)]), [object(), object()]
+    )
+    assert summary.matched_faces == 2
+    assert summary.candidate_faces == 4
+    assert summary.recall == 1.0
+    assert summary.precision == 0.5
+
+
+def test_empty_summary_defaults():
+    from sentinel.export.agreement import summarise_matches
+
+    summary = summarise_matches([])
+    assert summary.recall == 1.0
+    assert summary.mean_iou == 0.0
