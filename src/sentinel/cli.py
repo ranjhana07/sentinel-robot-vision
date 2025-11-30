@@ -58,15 +58,21 @@ def quantize(
     calibration_dir: Annotated[Optional[Path], typer.Option(help="images for static mode")] = None,
     image_size: Annotated[int, typer.Option()] = 416,
     max_images: Annotated[int, typer.Option()] = 200,
+    method: Annotated[str, typer.Option(help="minmax, entropy or percentile")] = "minmax",
+    per_channel: Annotated[bool, typer.Option(help="per-channel weight scales")] = True,
 ) -> None:
-    from sentinel.export.quantize import quantize_dynamic_int8, quantize_static_int8
+    from sentinel.export.quantize import CALIBRATION_METHODS, quantize_dynamic_int8, quantize_static_int8
 
+    if method not in CALIBRATION_METHODS:
+        raise typer.BadParameter(f"method must be one of {sorted(CALIBRATION_METHODS)}")
     if mode is QuantMode.dynamic:
         path = quantize_dynamic_int8(model, output)
     else:
         if calibration_dir is None:
             raise typer.BadParameter("static mode needs --calibration-dir")
-        path = quantize_static_int8(model, output, calibration_dir, image_size, max_images)
+        path = quantize_static_int8(
+            model, output, calibration_dir, image_size, max_images, method, per_channel
+        )
     typer.echo(f"wrote {path}")
 
 
