@@ -58,15 +58,21 @@ def quantize(
     calibration_dir: Annotated[Optional[Path], typer.Option(help="images for static mode")] = None,
     image_size: Annotated[int, typer.Option()] = 416,
     max_images: Annotated[int, typer.Option()] = 200,
+    method: Annotated[str, typer.Option(help="minmax, entropy or percentile")] = "minmax",
+    per_channel: Annotated[bool, typer.Option(help="per-channel weight scales")] = True,
 ) -> None:
-    from sentinel.export.quantize import quantize_dynamic_int8, quantize_static_int8
+    from sentinel.export.quantize import CALIBRATION_METHODS, quantize_dynamic_int8, quantize_static_int8
 
+    if method not in CALIBRATION_METHODS:
+        raise typer.BadParameter(f"method must be one of {sorted(CALIBRATION_METHODS)}")
     if mode is QuantMode.dynamic:
         path = quantize_dynamic_int8(model, output)
     else:
         if calibration_dir is None:
             raise typer.BadParameter("static mode needs --calibration-dir")
-        path = quantize_static_int8(model, output, calibration_dir, image_size, max_images)
+        path = quantize_static_int8(
+            model, output, calibration_dir, image_size, max_images, method, per_channel
+        )
     typer.echo(f"wrote {path}")
 
 
@@ -91,6 +97,39 @@ def bench(
     settings = {"image_size": image_size, "runs": runs, "warmup": warmup, "threads": threads}
     paths = write_reports(results, report_dir, settings, stem)
     typer.echo("wrote " + ", ".join(str(path) for path in paths))
+
+
+@app.command()
+def compare(
+    reference: Annotated[Path, typer.Argument(help="reference (fp32) onnx model")],
+    candidate: Annotated[Path, typer.Argument(help="model to check, for example the int8 one")],
+    images: Annotated[Path, typer.Option(help="folder of test images")],
+    image_size: Annotated[int, typer.Option()] = 416,
+    conf: Annotated[float, typer.Option()] = 0.35,
+    limit: Annotated[int, typer.Option()] = 200,
+    output: Annotated[Optional[Path], typer.Option(help="write the summary as json")] = None,
+) -> None:
+    import json
+    from dataclasses import asdict
+
+    import cv2
+
+    from sentinel.detection.onnx_engine import OnnxFaceDetector
+    from sentinel.export.agreement import compare_detectors
+    from sentinel.export.calibration import list_images
+
+    frames_list = [cv2.imread(str(path)) for path in list_images(images, limit)]
+    frames_list = [frame for frame in frames_list if frame is not None]
+    summary = compare_detectors(
+        OnnxFaceDetector(reference, image_size, conf),
+        OnnxFaceDetector(candidate, image_size, conf),
+        frames_list,
+    )
+    text = json.dumps(asdict(summary), indent=2)
+    typer.echo(text)
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(text + "\n", encoding="utf-8")
 
 
 @app.command()
