@@ -27,6 +27,8 @@ class TrackerConfig(BaseModel):
     iou_threshold: float = Field(0.3, ge=0.0, le=1.0)
     max_age: int = Field(15, ge=0)
     min_hits: int = Field(2, ge=1)
+    use_motion: bool = True
+    velocity_smoothing: float = Field(0.6, ge=0.0, lt=1.0)
 
 
 class ZoneRule(BaseModel):
