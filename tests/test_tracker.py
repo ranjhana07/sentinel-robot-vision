@@ -58,3 +58,36 @@ def test_unmatched_low_overlap_creates_new_track():
     tracker.update([face(0, 0)])
     tracks = tracker.update([face(45, 0)])
     assert [t.track_id for t in tracks] == [2]
+
+
+def run_positions(tracker, positions):
+    ids = []
+    for x in positions:
+        tracks = tracker.update([face(x, 10)])
+        ids.append(tracks[0].track_id if tracks else None)
+    return ids
+
+
+def test_fast_accelerating_face_is_lost_without_motion_model():
+    tracker = IouTracker(min_hits=1, iou_threshold=0.3, use_motion=False)
+    ids = run_positions(tracker, [0, 15, 30, 60, 90, 120])
+    assert len(set(ids)) > 1
+
+
+def test_motion_model_keeps_id_for_accelerating_face():
+    tracker = IouTracker(min_hits=1, iou_threshold=0.3, use_motion=True)
+    ids = run_positions(tracker, [0, 15, 30, 60, 90, 120])
+    assert set(ids) == {1}
+
+
+def test_predicted_box_extends_over_missed_frames():
+    from sentinel.tracking.tracker import Track
+
+    track = Track(1, (0.0, 0.0, 10.0, 10.0), 0.9, velocity=(5.0, -2.0), misses=1)
+    assert track.predicted_box() == (10.0, -4.0, 20.0, 6.0)
+
+
+def test_velocity_is_zero_when_motion_disabled():
+    tracker = IouTracker(min_hits=1, use_motion=False)
+    run_positions(tracker, [0, 10, 20])
+    assert tracker._tracks[0].velocity == (0.0, 0.0)
