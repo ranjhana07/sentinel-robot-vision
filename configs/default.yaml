@@ -23,6 +23,8 @@ tracker:
   iou_threshold: 0.3
   max_age: 15
   min_hits: 2
+  use_motion: true
+  velocity_smoothing: 0.6
 
 speech:
   backend: pyttsx3

@@ -16,6 +16,13 @@ class Track:
     misses: int = 0
     identity: str | None = None
     identity_checked: bool = False
+    velocity: tuple[float, float] = (0.0, 0.0)
+
+    def predicted_box(self) -> Box:
+        shift_x, shift_y = self.velocity
+        steps = self.misses + 1
+        x1, y1, x2, y2 = self.box
+        return (x1 + shift_x * steps, y1 + shift_y * steps, x2 + shift_x * steps, y2 + shift_y * steps)
 
     @property
     def center(self) -> tuple[float, float]:
@@ -27,6 +34,8 @@ class IouTracker:
     iou_threshold: float = 0.3
     max_age: int = 15
     min_hits: int = 2
+    use_motion: bool = False
+    velocity_smoothing: float = 0.6
     _tracks: list[Track] = field(default_factory=list)
     _next_id: int = 1
 
@@ -38,6 +47,7 @@ class IouTracker:
         for track_index, detection_index in matches:
             track = self._tracks[track_index]
             detection = detections[detection_index]
+            track.velocity = self._blend_velocity(track, detection.center)
             track.box = detection.box
             track.score = detection.score
             track.hits += 1
@@ -55,10 +65,23 @@ class IouTracker:
         self._tracks = [track for track in self._tracks if track.misses <= self.max_age]
         return [t for t in self._tracks if t.misses == 0 and t.hits >= self.min_hits]
 
+    def _blend_velocity(self, track: Track, new_center: tuple[float, float]) -> tuple[float, float]:
+        if not self.use_motion:
+            return (0.0, 0.0)
+        steps = track.misses + 1
+        measured = ((new_center[0] - track.center[0]) / steps, (new_center[1] - track.center[1]) / steps)
+        blend = self.velocity_smoothing
+        return (
+            blend * track.velocity[0] + (1.0 - blend) * measured[0],
+            blend * track.velocity[1] + (1.0 - blend) * measured[1],
+        )
+
     def _match(self, detections: Sequence[Detection]) -> list[tuple[int, int]]:
         if not self._tracks or not detections:
             return []
-        track_boxes = np.array([t.box for t in self._tracks], dtype=np.float32)
+        track_boxes = np.array(
+            [t.predicted_box() if self.use_motion else t.box for t in self._tracks], dtype=np.float32
+        )
         detection_boxes = np.array([d.box for d in detections], dtype=np.float32)
         overlaps = iou_matrix(track_boxes, detection_boxes)
         matches: list[tuple[int, int]] = []
