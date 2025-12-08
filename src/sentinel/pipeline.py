@@ -71,7 +71,7 @@ class Pipeline:
                             box=[round(v, 1) for v in track.box],
                         )
                 for event in self.policy.evaluate(tracks, frame.shape[:2]):
-                    queued = self.worker.say(event.text) if self.worker else False
+                    queued = self.worker.say(event.text, event.priority) if self.worker else False
                     self.robot_log.log(
                         "speech", kind=event.kind, text=event.text, tracks=list(event.track_ids), queued=queued
                     )

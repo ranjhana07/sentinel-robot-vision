@@ -7,11 +7,17 @@ from sentinel.speech.cooldown import CooldownTable
 from sentinel.tracking.tracker import Track
 
 
+PRIORITY_ZONE = 0
+PRIORITY_UNKNOWN = 1
+PRIORITY_GREETING = 2
+
+
 @dataclass(frozen=True)
 class SpeechEvent:
     kind: str
     text: str
     track_ids: tuple[int, ...]
+    priority: int = 1
 
 
 class SpeechPolicy:
@@ -51,7 +57,7 @@ class SpeechPolicy:
             text = self._config.unknown_phrase
         else:
             text = self._config.group_phrase.format(count=len(unknown))
-        return [SpeechEvent("unknown", text, tuple(track.track_id for track in fresh))]
+        return [SpeechEvent("unknown", text, tuple(track.track_id for track in fresh), PRIORITY_UNKNOWN)]
 
     def _greet_known(self, tracks: Sequence[Track]) -> list[SpeechEvent]:
         events = []
@@ -60,7 +66,7 @@ class SpeechPolicy:
                 continue
             if self._cooldowns.try_acquire(("greet", track.identity), self._config.cooldown_seconds):
                 text = self._config.greeting.format(name=track.identity)
-                events.append(SpeechEvent("greeting", text, (track.track_id,)))
+                events.append(SpeechEvent("greeting", text, (track.track_id,), PRIORITY_GREETING))
         return events
 
     def _check_zones(self, tracks: Sequence[Track], frame_shape: tuple[int, int]) -> list[SpeechEvent]:
@@ -75,7 +81,7 @@ class SpeechPolicy:
                 if not point_in_area(center_x / width, center_y / height, rule.area):
                     continue
                 if self._cooldowns.try_acquire(("zone", rule.name, track.track_id), cooldown):
-                    events.append(SpeechEvent(f"zone:{rule.name}", rule.phrase, (track.track_id,)))
+                    events.append(SpeechEvent(f"zone:{rule.name}", rule.phrase, (track.track_id,), PRIORITY_ZONE))
         return events
 
     @staticmethod

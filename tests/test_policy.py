@@ -118,3 +118,12 @@ def test_zone_rule_respects_applies_to(clock):
 def test_point_in_area_edges():
     assert point_in_area(0.5, 0.5, (0.5, 0.5, 1.0, 1.0))
     assert not point_in_area(0.49, 0.5, (0.5, 0.5, 1.0, 1.0))
+
+
+def test_event_priorities_order_zone_before_unknown_before_greeting(clock):
+    rule = ZoneRule(name="vault", area=(0.0, 0.0, 1.0, 1.0), phrase="Restricted", applies_to="unknown")
+    policy = SpeechPolicy(SpeechConfig(zones=[rule]), clock)
+    tracks = [track(1), track(2, x=300, identity="Asha")]
+    events = policy.evaluate(tracks, frame_shape=(480, 640))
+    priorities = {event.kind: event.priority for event in events}
+    assert priorities["zone:vault"] < priorities["unknown"] < priorities["greeting"]
