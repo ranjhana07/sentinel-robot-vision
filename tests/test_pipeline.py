@@ -41,7 +41,7 @@ class RecordingWorker:
         self.started = True
         return self
 
-    def say(self, text):
+    def say(self, text, priority=1):
         self.said.append(text)
         return True
 
