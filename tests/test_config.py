@@ -61,3 +61,35 @@ def test_zone_area_must_be_ordered(tmp_path):
     )
     with pytest.raises(ValidationError):
         load_config(path)
+
+
+def test_quiet_hours_wrap_past_midnight():
+    from datetime import time
+
+    from sentinel.config import QuietHours
+
+    quiet = QuietHours(start="22:00", end="06:30")
+    assert quiet.contains(time(23, 15))
+    assert quiet.contains(time(2, 0))
+    assert not quiet.contains(time(6, 30))
+    assert not quiet.contains(time(12, 0))
+
+
+def test_quiet_hours_same_day_window():
+    from datetime import time
+
+    from sentinel.config import QuietHours
+
+    quiet = QuietHours(start="13:00", end="14:00")
+    assert quiet.contains(time(13, 30))
+    assert not quiet.contains(time(14, 0))
+
+
+def test_quiet_hours_load_from_yaml(tmp_path):
+    path = tmp_path / "quiet.yaml"
+    path.write_text(
+        "speech:\n  quiet_hours:\n    start: '22:00'\n    end: '06:00'\n    suppress: [greeting, unknown]\n",
+        encoding="utf-8",
+    )
+    config = load_config(path)
+    assert config.speech.quiet_hours.suppress == ["greeting", "unknown"]

@@ -1,3 +1,4 @@
+from datetime import time
 from pathlib import Path
 from typing import Literal
 
@@ -47,6 +48,17 @@ class ZoneRule(BaseModel):
         return value
 
 
+class QuietHours(BaseModel):
+    start: time
+    end: time
+    suppress: list[Literal["greeting", "unknown"]] = ["greeting"]
+
+    def contains(self, moment: time) -> bool:
+        if self.start <= self.end:
+            return self.start <= moment < self.end
+        return moment >= self.start or moment < self.end
+
+
 class SpeechConfig(BaseModel):
     enabled: bool = True
     backend: Literal["pyttsx3", "piper", "console"] = "pyttsx3"
@@ -60,6 +72,7 @@ class SpeechConfig(BaseModel):
     greeting: str = "Hello {name}"
     unknown_phrase: str = "Unknown person detected"
     group_phrase: str = "{count} unknown people detected"
+    quiet_hours: QuietHours | None = None
     zones: list[ZoneRule] = []
 
 
