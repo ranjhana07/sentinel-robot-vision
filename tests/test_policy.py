@@ -127,3 +127,27 @@ def test_event_priorities_order_zone_before_unknown_before_greeting(clock):
     events = policy.evaluate(tracks, frame_shape=(480, 640))
     priorities = {event.kind: event.priority for event in events}
     assert priorities["zone:vault"] < priorities["unknown"] < priorities["greeting"]
+
+
+def test_quiet_hours_suppress_greetings_but_not_zone_alerts(clock):
+    from datetime import time
+
+    from sentinel.config import QuietHours
+
+    rule = ZoneRule(name="vault", area=(0.0, 0.0, 1.0, 1.0), phrase="Restricted")
+    config = SpeechConfig(zones=[rule], quiet_hours=QuietHours(start="22:00", end="06:00"))
+    policy = SpeechPolicy(config, clock, wall_clock=lambda: time(23, 30))
+    events = policy.evaluate([track(1, identity="Asha")], frame_shape=(480, 640))
+    assert [event.kind for event in events] == ["zone:vault"]
+
+
+def test_suppressed_phrases_do_not_burn_their_cooldown(clock):
+    from datetime import time
+
+    from sentinel.config import QuietHours
+
+    config = SpeechConfig(quiet_hours=QuietHours(start="22:00", end="06:00"), cooldown_seconds=600)
+    moments = [time(23, 0), time(7, 0)]
+    policy = SpeechPolicy(config, clock, wall_clock=lambda: moments.pop(0))
+    assert policy.evaluate([track(1, identity="Asha")]) == []
+    assert len(policy.evaluate([track(1, identity="Asha")])) == 1

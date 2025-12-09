@@ -1,5 +1,7 @@
 import time
 from dataclasses import dataclass
+from datetime import datetime
+from datetime import time as datetime_time
 from typing import Callable, Sequence
 
 from sentinel.config import SpeechConfig
@@ -27,9 +29,11 @@ class SpeechPolicy:
         self,
         config: SpeechConfig,
         clock: Callable[[], float] = time.monotonic,
+        wall_clock: Callable[[], datetime_time] = lambda: datetime.now().time(),
     ) -> None:
         self._config = config
         self._cooldowns = CooldownTable(clock)
+        self._wall_clock = wall_clock
 
     def evaluate(
         self,
@@ -44,7 +48,13 @@ class SpeechPolicy:
         self._cooldowns.purge(self.PURGE_AFTER_SECONDS)
         return events
 
+    def _suppressed(self, kind: str) -> bool:
+        quiet = self._config.quiet_hours
+        return quiet is not None and kind in quiet.suppress and quiet.contains(self._wall_clock())
+
     def _announce_unknown(self, tracks: Sequence[Track]) -> list[SpeechEvent]:
+        if self._suppressed("unknown"):
+            return []
         unknown = [track for track in tracks if track.identity is None]
         fresh = [
             track
@@ -60,6 +70,8 @@ class SpeechPolicy:
         return [SpeechEvent("unknown", text, tuple(track.track_id for track in fresh), PRIORITY_UNKNOWN)]
 
     def _greet_known(self, tracks: Sequence[Track]) -> list[SpeechEvent]:
+        if self._suppressed("greeting"):
+            return []
         events = []
         for track in tracks:
             if track.identity is None:
