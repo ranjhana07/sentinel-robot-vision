@@ -151,3 +151,13 @@ def test_suppressed_phrases_do_not_burn_their_cooldown(clock):
     policy = SpeechPolicy(config, clock, wall_clock=lambda: moments.pop(0))
     assert policy.evaluate([track(1, identity="Asha")]) == []
     assert len(policy.evaluate([track(1, identity="Asha")])) == 1
+
+
+def test_rate_limit_caps_routine_announcements_but_not_zone_alerts(clock):
+    rule = ZoneRule(name="vault", area=(0.0, 0.0, 1.0, 1.0), phrase="Restricted")
+    config = SpeechConfig(zones=[rule], max_phrases_per_minute=1)
+    policy = SpeechPolicy(config, clock)
+    tracks = [track(1), track(2, x=300, identity="Asha")]
+    kinds = [event.kind for event in policy.evaluate(tracks, frame_shape=(480, 640))]
+    assert kinds.count("zone:vault") == 2
+    assert len([kind for kind in kinds if not kind.startswith("zone")]) == 1

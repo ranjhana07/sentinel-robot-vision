@@ -72,6 +72,7 @@ class SpeechConfig(BaseModel):
     greeting: str = "Hello {name}"
     unknown_phrase: str = "Unknown person detected"
     group_phrase: str = "{count} unknown people detected"
+    max_phrases_per_minute: int = Field(0, ge=0)
     quiet_hours: QuietHours | None = None
     zones: list[ZoneRule] = []
 

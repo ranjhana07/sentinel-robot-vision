@@ -6,6 +6,7 @@ from typing import Callable, Sequence
 
 from sentinel.config import SpeechConfig
 from sentinel.speech.cooldown import CooldownTable
+from sentinel.speech.ratelimit import SlidingWindowLimiter
 from sentinel.tracking.tracker import Track
 
 
@@ -34,6 +35,7 @@ class SpeechPolicy:
         self._config = config
         self._cooldowns = CooldownTable(clock)
         self._wall_clock = wall_clock
+        self._limiter = SlidingWindowLimiter(config.max_phrases_per_minute, 60.0, clock)
 
     def evaluate(
         self,
@@ -43,8 +45,8 @@ class SpeechPolicy:
         events: list[SpeechEvent] = []
         if frame_shape is not None:
             events.extend(self._check_zones(tracks, frame_shape))
-        events.extend(self._announce_unknown(tracks))
-        events.extend(self._greet_known(tracks))
+        routine = self._announce_unknown(tracks) + self._greet_known(tracks)
+        events.extend(event for event in routine if self._limiter.allow())
         self._cooldowns.purge(self.PURGE_AFTER_SECONDS)
         return events
 
