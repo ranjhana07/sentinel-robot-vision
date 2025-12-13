@@ -53,3 +53,15 @@ def test_backend_failure_does_not_kill_worker():
     worker.say("good")
     worker.stop()
     assert backend.spoken == ["good"]
+
+
+def test_urgent_phrase_jumps_the_queue():
+    backend = RecordingBackend(delay=5.0)
+    worker = SpeechWorker(backend, max_queue=4).start()
+    worker.say("first")
+    time.sleep(0.05)
+    worker.say("greeting", priority=2)
+    worker.say("alert", priority=0)
+    backend.release.set()
+    worker.stop()
+    assert backend.spoken == ["first", "alert", "greeting"]

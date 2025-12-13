@@ -34,6 +34,11 @@ speech:
   greeting: "Hello {name}"
   unknown_phrase: "Unknown person detected"
   group_phrase: "{count} unknown people detected"
+  max_phrases_per_minute: 6
+  quiet_hours:
+    start: "22:00"
+    end: "06:00"
+    suppress: [greeting]
   zones:
     - name: restricted
       area: [0.55, 0.0, 1.0, 1.0]

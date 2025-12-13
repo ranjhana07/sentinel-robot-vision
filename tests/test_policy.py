@@ -118,3 +118,46 @@ def test_zone_rule_respects_applies_to(clock):
 def test_point_in_area_edges():
     assert point_in_area(0.5, 0.5, (0.5, 0.5, 1.0, 1.0))
     assert not point_in_area(0.49, 0.5, (0.5, 0.5, 1.0, 1.0))
+
+
+def test_event_priorities_order_zone_before_unknown_before_greeting(clock):
+    rule = ZoneRule(name="vault", area=(0.0, 0.0, 1.0, 1.0), phrase="Restricted", applies_to="unknown")
+    policy = SpeechPolicy(SpeechConfig(zones=[rule]), clock)
+    tracks = [track(1), track(2, x=300, identity="Asha")]
+    events = policy.evaluate(tracks, frame_shape=(480, 640))
+    priorities = {event.kind: event.priority for event in events}
+    assert priorities["zone:vault"] < priorities["unknown"] < priorities["greeting"]
+
+
+def test_quiet_hours_suppress_greetings_but_not_zone_alerts(clock):
+    from datetime import time
+
+    from sentinel.config import QuietHours
+
+    rule = ZoneRule(name="vault", area=(0.0, 0.0, 1.0, 1.0), phrase="Restricted")
+    config = SpeechConfig(zones=[rule], quiet_hours=QuietHours(start="22:00", end="06:00"))
+    policy = SpeechPolicy(config, clock, wall_clock=lambda: time(23, 30))
+    events = policy.evaluate([track(1, identity="Asha")], frame_shape=(480, 640))
+    assert [event.kind for event in events] == ["zone:vault"]
+
+
+def test_suppressed_phrases_do_not_burn_their_cooldown(clock):
+    from datetime import time
+
+    from sentinel.config import QuietHours
+
+    config = SpeechConfig(quiet_hours=QuietHours(start="22:00", end="06:00"), cooldown_seconds=600)
+    moments = [time(23, 0), time(7, 0)]
+    policy = SpeechPolicy(config, clock, wall_clock=lambda: moments.pop(0))
+    assert policy.evaluate([track(1, identity="Asha")]) == []
+    assert len(policy.evaluate([track(1, identity="Asha")])) == 1
+
+
+def test_rate_limit_caps_routine_announcements_but_not_zone_alerts(clock):
+    rule = ZoneRule(name="vault", area=(0.0, 0.0, 1.0, 1.0), phrase="Restricted")
+    config = SpeechConfig(zones=[rule], max_phrases_per_minute=1)
+    policy = SpeechPolicy(config, clock)
+    tracks = [track(1), track(2, x=300, identity="Asha")]
+    kinds = [event.kind for event in policy.evaluate(tracks, frame_shape=(480, 640))]
+    assert kinds.count("zone:vault") == 2
+    assert len([kind for kind in kinds if not kind.startswith("zone")]) == 1
