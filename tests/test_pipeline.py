@@ -1,4 +1,5 @@
 import json
+import time
 
 import numpy as np
 
@@ -100,3 +101,40 @@ def test_stop_request_ends_the_loop(tmp_path):
     pipeline, _, _ = build(tmp_path, [[]] * 5)
     pipeline.request_stop()
     assert pipeline.run() == 0
+
+
+class StallingSource:
+    def __init__(self, stall_seconds):
+        self._stall_seconds = stall_seconds
+        self._calls = 0
+
+    def read(self):
+        self._calls += 1
+        if self._calls == 1:
+            return np.zeros((200, 300, 3), dtype=np.uint8)
+        if self._calls == 2:
+            time.sleep(self._stall_seconds)
+            return np.zeros((200, 300, 3), dtype=np.uint8)
+        return None
+
+    def release(self):
+        pass
+
+
+def test_stalled_source_is_reported_once_and_recovers(tmp_path):
+    config = AppConfig(source=SourceConfig(kind="video", target="x", stall_seconds=0.1))
+    pipeline = Pipeline(
+        config=config,
+        detector=ScriptedDetector([]),
+        source=StallingSource(0.5),
+        tracker=IouTracker(),
+        policy=SpeechPolicy(config.speech),
+        worker=None,
+        robot_log=RobotLogger(tmp_path),
+        resolver=UnknownResolver(),
+        read_timeout=0.05,
+    )
+    assert pipeline.run() == 2
+    events = [event["event"] for event in read_events(tmp_path)]
+    assert events.count("frame_stall") == 1
+    assert events.count("frame_resume") == 1
