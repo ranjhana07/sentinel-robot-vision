@@ -16,12 +16,22 @@ class DetectorConfig(BaseModel):
     intra_op_threads: int = Field(4, ge=1)
 
 
+class ReconnectConfig(BaseModel):
+    enabled: bool = True
+    max_failures: int = Field(5, ge=1)
+    max_attempts: int = Field(5, ge=1)
+    base_delay: float = Field(0.5, gt=0.0)
+    max_delay: float = Field(10.0, gt=0.0)
+
+
 class SourceConfig(BaseModel):
     kind: Literal["camera", "video", "picamera"] = "camera"
     target: int | str = 0
     width: int = 640
     height: int = 480
     queue_size: int = Field(2, ge=1)
+    reconnect: ReconnectConfig = ReconnectConfig()
+    stall_seconds: float = Field(5.0, gt=0.0)
 
 
 class TrackerConfig(BaseModel):

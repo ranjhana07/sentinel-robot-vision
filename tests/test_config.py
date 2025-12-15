@@ -93,3 +93,13 @@ def test_quiet_hours_load_from_yaml(tmp_path):
     )
     config = load_config(path)
     assert config.speech.quiet_hours.suppress == ["greeting", "unknown"]
+
+
+def test_reconnect_defaults_and_validation(tmp_path):
+    config = AppConfig()
+    assert config.source.reconnect.enabled
+    assert config.source.reconnect.max_attempts == 5
+    path = tmp_path / "bad.yaml"
+    path.write_text("source:\n  reconnect:\n    base_delay: 0\n", encoding="utf-8")
+    with pytest.raises(ValidationError):
+        load_config(path)

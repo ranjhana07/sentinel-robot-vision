@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Callable, Protocol
 
 import cv2
 import numpy as np
@@ -29,7 +29,7 @@ class OpenCVSource:
         self._capture.release()
 
 
-def build_source(config: SourceConfig) -> FrameSource:
+def open_source(config: SourceConfig) -> FrameSource:
     if config.kind == "picamera":
         from sentinel.capture.picamera import PicameraSource
 
@@ -38,3 +38,21 @@ def build_source(config: SourceConfig) -> FrameSource:
     if config.kind == "camera":
         target = int(target)
     return OpenCVSource(target, config.width, config.height)
+
+
+def build_source(
+    config: SourceConfig,
+    on_event: Callable[[str, dict], None] | None = None,
+) -> FrameSource:
+    if config.kind == "video" or not config.reconnect.enabled:
+        return open_source(config)
+    from sentinel.capture.reconnect import ReconnectingSource
+
+    return ReconnectingSource(
+        lambda: open_source(config),
+        max_failures=config.reconnect.max_failures,
+        max_attempts=config.reconnect.max_attempts,
+        base_delay=config.reconnect.base_delay,
+        max_delay=config.reconnect.max_delay,
+        on_event=on_event,
+    )

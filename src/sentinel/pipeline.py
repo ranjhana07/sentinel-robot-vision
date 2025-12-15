@@ -34,6 +34,7 @@ class Pipeline:
     robot_log: RobotLogger
     resolver: IdentityResolver
     display: bool = False
+    read_timeout: float = 0.5
     _stop: threading.Event = field(default_factory=threading.Event)
 
     def request_stop(self) -> None:
@@ -53,11 +54,19 @@ class Pipeline:
         self.robot_log.log("startup", model=str(self.config.detector.model_path))
         try:
             while not self._stop.is_set() and (max_frames is None or frames < max_frames):
-                frame = capture.read(timeout=0.5)
+                frame = capture.read(timeout=self.read_timeout)
                 if frame is None:
                     if capture.exhausted:
                         break
+                    idle = time.monotonic() - last_frame_at
+                    if idle >= self.config.source.stall_seconds and not stalled:
+                        stalled = True
+                        self.robot_log.log("frame_stall", level="warning", idle_seconds=round(idle, 1))
                     continue
+                if stalled:
+                    self.robot_log.log("frame_resume")
+                    stalled = False
+                last_frame_at = time.monotonic()
                 tracks = self.tracker.update(self.detector.detect(frame))
                 for track in tracks:
                     if not track.identity_checked:
@@ -99,10 +108,15 @@ def build_pipeline(config: AppConfig, display: bool = False) -> Pipeline:
     worker = None
     if config.speech.enabled:
         worker = SpeechWorker(build_backend(config.speech), config.speech.queue_size)
+    robot_log = RobotLogger.from_config(config.logging)
+
+    def log_source_event(name: str, fields: dict) -> None:
+        robot_log.log(name, level="warning", **fields)
+
     return Pipeline(
         config=config,
         detector=OnnxFaceDetector.from_config(config.detector),
-        source=build_source(config.source),
+        source=build_source(config.source, log_source_event),
         tracker=IouTracker(
             config.tracker.iou_threshold,
             config.tracker.max_age,
@@ -112,7 +126,7 @@ def build_pipeline(config: AppConfig, display: bool = False) -> Pipeline:
         ),
         policy=SpeechPolicy(config.speech),
         worker=worker,
-        robot_log=RobotLogger.from_config(config.logging),
+        robot_log=robot_log,
         resolver=UnknownResolver(),
         display=display,
     )
