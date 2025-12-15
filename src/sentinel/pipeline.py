@@ -51,6 +51,8 @@ class Pipeline:
         meter = FpsMeter()
         frames = 0
         last_fps_log = time.monotonic()
+        last_frame_at = time.monotonic()
+        stalled = False
         self.robot_log.log("startup", model=str(self.config.detector.model_path))
         try:
             while not self._stop.is_set() and (max_frames is None or frames < max_frames):
