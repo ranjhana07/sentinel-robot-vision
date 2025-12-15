@@ -30,14 +30,13 @@ class ReconnectingSource:
     def read(self) -> np.ndarray | None:
         if self._source is None:
             return None
-        frame = self._source.read()
-        if frame is not None:
-            self._failures = 0
-            return frame
-        self._failures += 1
-        self._on_event("camera_read_failed", {"consecutive": self._failures})
-        if self._failures < self._max_failures:
-            return self.read() if self._failures < self._max_failures else None
+        while self._failures < self._max_failures:
+            frame = self._source.read()
+            if frame is not None:
+                self._failures = 0
+                return frame
+            self._failures += 1
+            self._on_event("camera_read_failed", {"consecutive": self._failures})
         return self._reconnect()
 
     def _reconnect(self) -> np.ndarray | None:
