@@ -42,7 +42,7 @@ def export(
     weights: Annotated[Path, typer.Argument(help="trained .pt weights")],
     output: Annotated[Optional[Path], typer.Option(help="destination .onnx path")] = None,
     image_size: Annotated[int, typer.Option(help="square input size")] = 416,
-    opset: Annotated[int, typer.Option()] = 12,
+    opset: Annotated[int, typer.Option(help="13 or higher, needed for per-channel int8")] = 13,
 ) -> None:
     from sentinel.export.onnx_export import export_onnx
 
