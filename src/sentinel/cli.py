@@ -42,7 +42,7 @@ def export(
     weights: Annotated[Path, typer.Argument(help="trained .pt weights")],
     output: Annotated[Optional[Path], typer.Option(help="destination .onnx path")] = None,
     image_size: Annotated[int, typer.Option(help="square input size")] = 416,
-    opset: Annotated[int, typer.Option()] = 12,
+    opset: Annotated[int, typer.Option(help="13 or higher, needed for per-channel int8")] = 13,
 ) -> None:
     from sentinel.export.onnx_export import export_onnx
 
@@ -60,6 +60,7 @@ def quantize(
     max_images: Annotated[int, typer.Option()] = 200,
     method: Annotated[str, typer.Option(help="minmax, entropy or percentile")] = "minmax",
     per_channel: Annotated[bool, typer.Option(help="per-channel weight scales")] = True,
+    preprocess: Annotated[bool, typer.Option(help="run onnxruntime shape inference first")] = True,
 ) -> None:
     from sentinel.export.quantize import CALIBRATION_METHODS, quantize_dynamic_int8, quantize_static_int8
 
@@ -71,7 +72,7 @@ def quantize(
         if calibration_dir is None:
             raise typer.BadParameter("static mode needs --calibration-dir")
         path = quantize_static_int8(
-            model, output, calibration_dir, image_size, max_images, method, per_channel
+            model, output, calibration_dir, image_size, max_images, method, per_channel, preprocess
         )
     typer.echo(f"wrote {path}")
 

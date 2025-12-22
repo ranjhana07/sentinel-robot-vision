@@ -41,6 +41,14 @@ def quantize_dynamic_int8(
     return output
 
 
+def preprocess_for_quantization(model_path: Path | str, output_path: Path | str) -> Path:
+    from onnxruntime.quantization.shape_inference import quant_pre_process
+
+    output = Path(output_path)
+    quant_pre_process(str(model_path), str(output), skip_symbolic_shape=True)
+    return output
+
+
 def quantize_static_int8(
     model_path: Path | str,
     output_path: Path | str,
@@ -49,6 +57,7 @@ def quantize_static_int8(
     max_images: int = 200,
     method: str = "minmax",
     per_channel: bool = True,
+    preprocess: bool = True,
 ) -> Path:
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -58,8 +67,11 @@ def quantize_static_int8(
         input_size=input_size,
         max_images=max_images,
     )
+    source_path = Path(model_path)
+    if preprocess:
+        source_path = preprocess_for_quantization(model_path, output.with_suffix(".prep.onnx"))
     quantize_static(
-        str(model_path),
+        str(source_path),
         str(output),
         reader,
         quant_format=QuantFormat.QDQ,
@@ -68,4 +80,6 @@ def quantize_static_int8(
         per_channel=per_channel,
         calibrate_method=CALIBRATION_METHODS[method],
     )
+    if preprocess:
+        source_path.unlink(missing_ok=True)
     return output

@@ -6,7 +6,7 @@ def export_onnx(
     weights: Path | str,
     output: Path | str | None = None,
     image_size: int = 416,
-    opset: int = 12,
+    opset: int = 13,
     simplify: bool = True,
 ) -> Path:
     from ultralytics import YOLO

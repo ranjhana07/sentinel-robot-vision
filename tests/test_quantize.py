@@ -82,3 +82,23 @@ def test_static_quantization_needs_images(tmp_path):
     (tmp_path / "empty").mkdir()
     with pytest.raises(ValueError):
         quantize_static_int8(tmp_path / "conv.onnx", tmp_path / "o.onnx", tmp_path / "empty")
+
+
+def test_static_quantization_without_preprocess_leaves_no_temp_files(tmp_path):
+    conv_model(tmp_path / "conv.onnx")
+    calibration = tmp_path / "calibration"
+    calibration.mkdir()
+    cv2.imwrite(str(calibration / "a.png"), np.full((40, 40, 3), 90, dtype=np.uint8))
+    quantize_static_int8(
+        tmp_path / "conv.onnx", tmp_path / "out.onnx", calibration, input_size=32, preprocess=False
+    )
+    assert sorted(path.name for path in tmp_path.glob("*.onnx")) == ["conv.onnx", "out.onnx"]
+
+
+def test_static_quantization_cleans_up_preprocessed_copy(tmp_path):
+    conv_model(tmp_path / "conv.onnx")
+    calibration = tmp_path / "calibration"
+    calibration.mkdir()
+    cv2.imwrite(str(calibration / "a.png"), np.full((40, 40, 3), 90, dtype=np.uint8))
+    quantize_static_int8(tmp_path / "conv.onnx", tmp_path / "out.onnx", calibration, input_size=32)
+    assert sorted(path.name for path in tmp_path.glob("*.onnx")) == ["conv.onnx", "out.onnx"]
