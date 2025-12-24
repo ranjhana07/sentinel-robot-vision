@@ -103,3 +103,38 @@ def test_reconnect_defaults_and_validation(tmp_path):
     path.write_text("source:\n  reconnect:\n    base_delay: 0\n", encoding="utf-8")
     with pytest.raises(ValidationError):
         load_config(path)
+
+
+def test_overrides_set_nested_values_with_types():
+    from sentinel.config import apply_overrides
+
+    config = apply_overrides(
+        AppConfig(),
+        ["detector.conf_threshold=0.6", "speech.backend=console", "source.reconnect.enabled=false"],
+    )
+    assert config.detector.conf_threshold == 0.6
+    assert config.speech.backend == "console"
+    assert config.source.reconnect.enabled is False
+
+
+def test_overrides_do_not_mutate_the_original():
+    from sentinel.config import apply_overrides
+
+    original = AppConfig()
+    apply_overrides(original, ["tracker.max_age=99"])
+    assert original.tracker.max_age == 15
+
+
+@pytest.mark.parametrize("bad", ["detector", "detector.nope=1", "nosection.x=1", "=3"])
+def test_overrides_reject_unknown_keys_and_bad_shape(bad):
+    from sentinel.config import apply_overrides
+
+    with pytest.raises(ValueError):
+        apply_overrides(AppConfig(), [bad])
+
+
+def test_overrides_are_validated():
+    from sentinel.config import apply_overrides
+
+    with pytest.raises(ValidationError):
+        apply_overrides(AppConfig(), ["detector.conf_threshold=3"])
