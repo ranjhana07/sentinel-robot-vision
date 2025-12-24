@@ -76,6 +76,7 @@ def quantize_static_int8(
     method: str = "minmax",
     per_channel: bool = True,
     preprocess: bool = True,
+    exclude_head: bool = True,
 ) -> Path:
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -97,6 +98,7 @@ def quantize_static_int8(
         weight_type=QuantType.QInt8,
         per_channel=per_channel,
         calibrate_method=CALIBRATION_METHODS[method],
+        nodes_to_exclude=head_nodes_to_exclude(model_path) if exclude_head else [],
     )
     if preprocess:
         source_path.unlink(missing_ok=True)
