@@ -1,3 +1,4 @@
+import json
 import signal
 from enum import Enum
 from pathlib import Path
@@ -20,16 +21,18 @@ def run(
     model: Annotated[Optional[Path], typer.Option(help="onnx model override")] = None,
     display: Annotated[bool, typer.Option(help="show an overlay window")] = False,
     max_frames: Annotated[Optional[int], typer.Option(help="stop after this many frames")] = None,
+    overrides: Annotated[list[str], typer.Option("--set", help="override a config value, e.g. detector.conf_threshold=0.5")] = [],
 ) -> None:
-    from sentinel.config import load_config
+    from sentinel.config import apply_overrides, load_config
     from sentinel.pipeline import build_pipeline
 
-    app_config = load_config(config)
+    assignments = list(overrides)
     if source is not None:
-        app_config.source.kind = "camera" if source.isdigit() else "video"
-        app_config.source.target = int(source) if source.isdigit() else source
+        assignments.append(f"source.kind={'camera' if source.isdigit() else 'video'}")
+        assignments.append(f"source.target={source if source.isdigit() else json.dumps(source)}")
     if model is not None:
-        app_config.detector.model_path = model
+        assignments.append(f"detector.model_path={json.dumps(str(model))}")
+    app_config = apply_overrides(load_config(config), assignments)
     pipeline = build_pipeline(app_config, display=display)
     for signum in (signal.SIGINT, signal.SIGTERM):
         signal.signal(signum, lambda *_: pipeline.request_stop())
