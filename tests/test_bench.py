@@ -70,3 +70,14 @@ def test_benchmark_model_on_tiny_graph(tmp_path):
     assert result.runs == 5
     assert result.mean_ms > 0
     assert np.isfinite(result.fps)
+
+
+def test_interleaved_benchmark_returns_one_result_per_model(tmp_path):
+    from sentinel.bench import benchmark_interleaved
+
+    first, second = tmp_path / "a.onnx", tmp_path / "b.onnx"
+    build_tiny_model(first)
+    build_tiny_model(second)
+    results = benchmark_interleaved([first, second], input_size=32, runs=6, warmup=1, threads=1, rounds=3)
+    assert [r.name for r in results] == ["a.onnx", "b.onnx"]
+    assert all(r.runs == 6 for r in results)

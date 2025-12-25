@@ -63,6 +63,39 @@ def benchmark_model(
     )
 
 
+def benchmark_interleaved(
+    model_paths: Sequence[Path | str],
+    input_size: int = 416,
+    runs: int = 100,
+    warmup: int = 10,
+    threads: int = 4,
+    rounds: int = 5,
+) -> list[BenchResult]:
+    sessions = [build_session(path, intra_op_threads=threads) for path in model_paths]
+    sample = np.random.default_rng(0).random((1, 3, input_size, input_size), dtype=np.float32)
+    feeds = [{session.get_inputs()[0].name: sample} for session in sessions]
+    for session, feed in zip(sessions, feeds):
+        for _ in range(max(warmup, 1)):
+            session.run(None, feed)
+    timings: list[list[float]] = [[] for _ in sessions]
+    per_round = max(runs // rounds, 1)
+    for _ in range(rounds):
+        for index, (session, feed) in enumerate(zip(sessions, feeds)):
+            for _ in range(per_round):
+                started = time.perf_counter()
+                session.run(None, feed)
+                timings[index].append((time.perf_counter() - started) * 1000.0)
+    return [
+        BenchResult(
+            name=Path(path).name,
+            size_mb=Path(path).stat().st_size / 1e6,
+            runs=len(samples),
+            **latency_stats(samples),
+        )
+        for path, samples in zip(model_paths, timings)
+    ]
+
+
 def benchmark_pytorch(
     weights_path: Path | str,
     input_size: int = 416,
