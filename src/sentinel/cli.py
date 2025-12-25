@@ -165,6 +165,42 @@ def train(
     typer.echo(f"best weights: {best}")
 
 
+config_app = typer.Typer(no_args_is_help=True, help="Inspect configuration")
+app.add_typer(config_app, name="config")
+
+
+@config_app.command("show")
+def config_show(
+    config: Annotated[Path, typer.Option()] = Path("configs/default.yaml"),
+    overrides: Annotated[list[str], typer.Option("--set", help="apply an override before printing")] = [],
+) -> None:
+    import yaml
+
+    from sentinel.config import apply_overrides, load_config
+
+    effective = apply_overrides(load_config(config), list(overrides))
+    typer.echo(yaml.safe_dump(effective.model_dump(mode="json"), sort_keys=False))
+
+
+@config_app.command("check")
+def config_check(
+    config: Annotated[Path, typer.Option()] = Path("configs/default.yaml"),
+) -> None:
+    from pydantic import ValidationError
+
+    from sentinel.config import load_config
+
+    try:
+        loaded = load_config(config)
+    except ValidationError as error:
+        typer.echo(str(error), err=True)
+        raise typer.Exit(code=1)
+    model = loaded.detector.model_path
+    typer.echo(f"{config} is valid")
+    if not model.exists():
+        typer.echo(f"note: model file {model} does not exist yet")
+
+
 logs_app = typer.Typer(no_args_is_help=True, help="Ingest and summarize robot logs")
 app.add_typer(logs_app, name="logs")
 
