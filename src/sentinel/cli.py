@@ -89,17 +89,24 @@ def bench(
     warmup: Annotated[int, typer.Option()] = 10,
     image_size: Annotated[int, typer.Option()] = 416,
     threads: Annotated[int, typer.Option()] = 4,
+    rounds: Annotated[int, typer.Option(help="interleave models over this many rounds")] = 5,
     report_dir: Annotated[Path, typer.Option()] = Path("reports"),
     stem: Annotated[str, typer.Option(help="report file name without extension")] = "benchmark",
 ) -> None:
-    from sentinel.bench import benchmark_model, benchmark_pytorch, render_markdown, write_reports
+    from sentinel.bench import benchmark_interleaved, benchmark_pytorch, render_markdown, write_reports
 
     results = []
     if pytorch is not None:
         results.append(benchmark_pytorch(pytorch, image_size, runs, warmup, threads))
-    results.extend(benchmark_model(path, image_size, runs, warmup, threads) for path in models)
+    results.extend(benchmark_interleaved(models, image_size, runs, warmup, threads, rounds))
     typer.echo(render_markdown(results))
-    settings = {"image_size": image_size, "runs": runs, "warmup": warmup, "threads": threads}
+    settings = {
+        "image_size": image_size,
+        "runs": runs,
+        "warmup": warmup,
+        "threads": threads,
+        "rounds": rounds,
+    }
     paths = write_reports(results, report_dir, settings, stem)
     typer.echo("wrote " + ", ".join(str(path) for path in paths))
 
