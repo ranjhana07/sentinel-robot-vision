@@ -127,3 +127,21 @@ def load_config(path: Path | str) -> AppConfig:
     with open(path, "r", encoding="utf-8") as handle:
         raw = yaml.safe_load(handle) or {}
     return AppConfig.model_validate(raw)
+
+
+def apply_overrides(config: AppConfig, assignments: list[str]) -> AppConfig:
+    data = config.model_dump(mode="python")
+    for assignment in assignments:
+        key, separator, raw_value = assignment.partition("=")
+        if not separator or not key:
+            raise ValueError(f"override {assignment!r} must look like section.key=value")
+        parts = key.split(".")
+        cursor = data
+        for part in parts[:-1]:
+            if not isinstance(cursor.get(part), dict):
+                raise ValueError(f"unknown config section {part!r} in {key!r}")
+            cursor = cursor[part]
+        if parts[-1] not in cursor:
+            raise ValueError(f"unknown config key {key!r}")
+        cursor[parts[-1]] = yaml.safe_load(raw_value)
+    return AppConfig.model_validate(data)
