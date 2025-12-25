@@ -26,6 +26,7 @@ def test_latency_stats():
     assert stats["mean_ms"] == pytest.approx(25.0)
     assert stats["p50_ms"] == pytest.approx(25.0)
     assert stats["fps"] == pytest.approx(40.0)
+    assert stats["median_fps"] == pytest.approx(40.0)
     assert stats["p95_ms"] > stats["p50_ms"]
 
 
@@ -35,7 +36,7 @@ def test_latency_stats_requires_samples():
 
 
 def make_result(name, fps):
-    return BenchResult(name, 10.0, 50, 1000.0 / fps, 1000.0 / fps, 1100.0 / fps, fps)
+    return BenchResult(name, 10.0, 50, 1000.0 / fps, 1000.0 / fps, 1100.0 / fps, fps, fps)
 
 
 def test_markdown_reports_speedup_against_first_row():

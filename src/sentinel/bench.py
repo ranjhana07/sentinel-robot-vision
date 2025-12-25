@@ -20,6 +20,7 @@ class BenchResult:
     p50_ms: float
     p95_ms: float
     fps: float
+    median_fps: float
 
 
 def latency_stats(samples_ms: Sequence[float]) -> dict[str, float]:
@@ -32,6 +33,7 @@ def latency_stats(samples_ms: Sequence[float]) -> dict[str, float]:
         "p50_ms": float(np.percentile(values, 50)),
         "p95_ms": float(np.percentile(values, 95)),
         "fps": 1000.0 / mean_ms,
+        "median_fps": 1000.0 / float(np.percentile(values, 50)),
     }
 
 
@@ -93,15 +95,16 @@ def benchmark_pytorch(
 
 def render_markdown(results: Sequence[BenchResult]) -> str:
     lines = [
-        "| model | size (MB) | mean (ms) | p50 (ms) | p95 (ms) | FPS | speedup |",
-        "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| model | size (MB) | mean (ms) | p50 (ms) | p95 (ms) | FPS (mean) | FPS (median) | speedup |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
-    baseline_fps = results[0].fps if results else 0.0
+    baseline_fps = results[0].median_fps if results else 0.0
     for result in results:
-        speedup = result.fps / baseline_fps if baseline_fps else 0.0
+        speedup = result.median_fps / baseline_fps if baseline_fps else 0.0
         lines.append(
             f"| {result.name} | {result.size_mb:.1f} | {result.mean_ms:.1f} "
-            f"| {result.p50_ms:.1f} | {result.p95_ms:.1f} | {result.fps:.1f} | {speedup:.2f}x |"
+            f"| {result.p50_ms:.1f} | {result.p95_ms:.1f} | {result.fps:.1f} "
+            f"| {result.median_fps:.1f} | {speedup:.2f}x |"
         )
     return "\n".join(lines) + "\n"
 
