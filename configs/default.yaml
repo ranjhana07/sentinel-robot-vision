@@ -46,6 +46,13 @@ speech:
       applies_to: unknown
       cooldown_seconds: 30
 
+snapshots:
+  enabled: false
+  directory: data/snapshots
+  max_files: 200
+  padding: 0.25
+  quality: 85
+
 rag:
   persist_dir: data/chroma
   collection: robot_logs
