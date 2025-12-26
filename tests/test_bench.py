@@ -26,6 +26,7 @@ def test_latency_stats():
     assert stats["mean_ms"] == pytest.approx(25.0)
     assert stats["p50_ms"] == pytest.approx(25.0)
     assert stats["fps"] == pytest.approx(40.0)
+    assert stats["median_fps"] == pytest.approx(40.0)
     assert stats["p95_ms"] > stats["p50_ms"]
 
 
@@ -35,7 +36,7 @@ def test_latency_stats_requires_samples():
 
 
 def make_result(name, fps):
-    return BenchResult(name, 10.0, 50, 1000.0 / fps, 1000.0 / fps, 1100.0 / fps, fps)
+    return BenchResult(name, 10.0, 50, 1000.0 / fps, 1000.0 / fps, 1100.0 / fps, fps, fps)
 
 
 def test_markdown_reports_speedup_against_first_row():
@@ -69,3 +70,14 @@ def test_benchmark_model_on_tiny_graph(tmp_path):
     assert result.runs == 5
     assert result.mean_ms > 0
     assert np.isfinite(result.fps)
+
+
+def test_interleaved_benchmark_returns_one_result_per_model(tmp_path):
+    from sentinel.bench import benchmark_interleaved
+
+    first, second = tmp_path / "a.onnx", tmp_path / "b.onnx"
+    build_tiny_model(first)
+    build_tiny_model(second)
+    results = benchmark_interleaved([first, second], input_size=32, runs=6, warmup=1, threads=1, rounds=3)
+    assert [r.name for r in results] == ["a.onnx", "b.onnx"]
+    assert all(r.runs == 6 for r in results)
