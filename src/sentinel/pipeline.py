@@ -11,6 +11,7 @@ from sentinel.config import AppConfig
 from sentinel.detection.onnx_engine import OnnxFaceDetector
 from sentinel.render import draw_tracks
 from sentinel.robotlog.logger import RobotLogger
+from sentinel.snapshots import SnapshotWriter
 from sentinel.speech.factory import build_backend
 from sentinel.speech.policy import SpeechPolicy
 from sentinel.speech.worker import SpeechWorker
@@ -35,6 +36,7 @@ class Pipeline:
     resolver: IdentityResolver
     display: bool = False
     read_timeout: float = 0.5
+    snapshots: SnapshotWriter | None = None
     _stop: threading.Event = field(default_factory=threading.Event)
 
     def request_stop(self) -> None:
@@ -81,6 +83,10 @@ class Pipeline:
                             score=round(track.score, 3),
                             box=[round(v, 1) for v in track.box],
                         )
+                        if self.snapshots is not None and track.identity is None:
+                            saved = self.snapshots.save(frame, track)
+                            if saved is not None:
+                                self.robot_log.log("snapshot", track=track.track_id, path=str(saved))
                 for event in self.policy.evaluate(tracks, frame.shape[:2]):
                     queued = self.worker.say(event.text, event.priority) if self.worker else False
                     self.robot_log.log(
@@ -131,4 +137,12 @@ def build_pipeline(config: AppConfig, display: bool = False) -> Pipeline:
         robot_log=robot_log,
         resolver=UnknownResolver(),
         display=display,
+        snapshots=build_snapshot_writer(config),
     )
+
+
+def build_snapshot_writer(config: AppConfig) -> SnapshotWriter | None:
+    settings = config.snapshots
+    if not settings.enabled:
+        return None
+    return SnapshotWriter(settings.directory, settings.max_files, settings.padding, settings.quality)

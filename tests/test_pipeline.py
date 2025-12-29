@@ -138,3 +138,15 @@ def test_stalled_source_is_reported_once_and_recovers(tmp_path):
     events = [event["event"] for event in read_events(tmp_path)]
     assert events.count("frame_stall") == 1
     assert events.count("frame_resume") == 1
+
+
+def test_unknown_face_snapshot_is_saved_and_logged(tmp_path):
+    from sentinel.snapshots import SnapshotWriter
+
+    pipeline, _, _ = build(tmp_path / "logs", [[face(50)], [face(52)], [face(54)]])
+    pipeline.snapshots = SnapshotWriter(tmp_path / "snaps")
+    pipeline.run()
+    events = read_events(tmp_path / "logs")
+    snapshot_events = [event for event in events if event["event"] == "snapshot"]
+    assert len(snapshot_events) == 1
+    assert len(list((tmp_path / "snaps").glob("*.jpg"))) == 1

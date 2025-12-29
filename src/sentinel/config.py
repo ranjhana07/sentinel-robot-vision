@@ -104,11 +104,20 @@ class RagConfig(BaseModel):
     top_k: int = Field(6, ge=1)
 
 
+class SnapshotConfig(BaseModel):
+    enabled: bool = False
+    directory: Path = Path("data/snapshots")
+    max_files: int = Field(200, ge=1)
+    padding: float = Field(0.25, ge=0.0, le=1.0)
+    quality: int = Field(85, ge=1, le=100)
+
+
 class AppConfig(BaseModel):
     detector: DetectorConfig = DetectorConfig()
     source: SourceConfig = SourceConfig()
     tracker: TrackerConfig = TrackerConfig()
     speech: SpeechConfig = SpeechConfig()
+    snapshots: SnapshotConfig = SnapshotConfig()
     rag: RagConfig = RagConfig()
     logging: LoggingConfig = LoggingConfig()
 
