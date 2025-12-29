@@ -229,6 +229,22 @@ def logs_ingest(
     typer.echo(f"stored {stored} chunks, collection now holds {store.count()}")
 
 
+@logs_app.command("stats")
+def logs_stats(
+    paths: Annotated[list[Path], typer.Argument(help="log files or directories")],
+    since: Annotated[Optional[str], typer.Option(help="ISO time or relative value such as 2h")] = None,
+    until: Annotated[str, typer.Option()] = "now",
+    top: Annotated[int, typer.Option(help="how many frequent events to list")] = 8,
+) -> None:
+    from sentinel.rag.ingest import load_records
+    from sentinel.rag.stats import compute_stats, render_stats
+    from sentinel.rag.timeparse import parse_time_argument
+
+    start = parse_time_argument(since) if since else None
+    end = parse_time_argument(until) if since else None
+    typer.echo(render_stats(compute_stats(load_records(paths), start, end, top)))
+
+
 @logs_app.command("summarize")
 def logs_summarize(
     since: Annotated[str, typer.Option(help="ISO time or relative value such as 2h")],
