@@ -217,15 +217,28 @@ def logs_ingest(
     paths: Annotated[list[Path], typer.Argument(help="log files or directories (jsonl or text)")],
     config: Annotated[Path, typer.Option()] = Path("configs/default.yaml"),
     window_minutes: Annotated[Optional[int], typer.Option(help="chunk window override")] = None,
+    force: Annotated[bool, typer.Option(help="re-ingest files even if unchanged")] = False,
 ) -> None:
     from sentinel.config import load_config
     from sentinel.rag.ingest import build_chunks
     from sentinel.rag.store import LogStore
 
+    from sentinel.rag.ingest import expand_paths
+    from sentinel.rag.manifest import IngestManifest
+
     rag = load_config(config).rag
-    chunks = build_chunks(paths, window_minutes or rag.window_minutes, rag.max_chunk_chars)
+    manifest = IngestManifest(rag.persist_dir / "ingest_manifest.json")
+    files = expand_paths(paths)
+    pending = files if force else [path for path in files if not manifest.is_current(path)]
+    typer.echo(f"{len(files) - len(pending)} unchanged files skipped, {len(pending)} to ingest")
+    if not pending:
+        return
+    chunks = build_chunks(pending, window_minutes or rag.window_minutes, rag.max_chunk_chars)
     store = LogStore.from_config(rag)
     stored = store.add_chunks(chunks)
+    for path in pending:
+        manifest.record(path)
+    manifest.save()
     typer.echo(f"stored {stored} chunks, collection now holds {store.count()}")
 
 
