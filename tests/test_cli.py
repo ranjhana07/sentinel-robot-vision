@@ -34,3 +34,12 @@ def test_config_check_fails_on_invalid_values(tmp_path):
 def test_quantize_static_requires_calibration_dir(tmp_path):
     result = runner.invoke(app, ["quantize", "model.onnx", "--output", str(tmp_path / "out.onnx")])
     assert result.exit_code != 0
+
+
+def test_logs_stats_reports_problem_events():
+    result = runner.invoke(
+        app,
+        ["logs", "stats", str(ROOT / "examples" / "sample_robot.jsonl"), "--since", "2025-11-04T10:00:00Z", "--until", "2025-11-04T10:30:00Z"],
+    )
+    assert result.exit_code == 0
+    assert "[error] tts_failure: 3" in result.stdout

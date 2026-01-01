@@ -217,16 +217,45 @@ def logs_ingest(
     paths: Annotated[list[Path], typer.Argument(help="log files or directories (jsonl or text)")],
     config: Annotated[Path, typer.Option()] = Path("configs/default.yaml"),
     window_minutes: Annotated[Optional[int], typer.Option(help="chunk window override")] = None,
+    force: Annotated[bool, typer.Option(help="re-ingest files even if unchanged")] = False,
 ) -> None:
     from sentinel.config import load_config
     from sentinel.rag.ingest import build_chunks
     from sentinel.rag.store import LogStore
 
+    from sentinel.rag.ingest import expand_paths
+    from sentinel.rag.manifest import IngestManifest
+
     rag = load_config(config).rag
-    chunks = build_chunks(paths, window_minutes or rag.window_minutes, rag.max_chunk_chars)
+    manifest = IngestManifest(rag.persist_dir / "ingest_manifest.json")
+    files = expand_paths(paths)
+    pending = files if force else [path for path in files if not manifest.is_current(path)]
+    typer.echo(f"{len(files) - len(pending)} unchanged files skipped, {len(pending)} to ingest")
+    if not pending:
+        return
+    chunks = build_chunks(pending, window_minutes or rag.window_minutes, rag.max_chunk_chars)
     store = LogStore.from_config(rag)
     stored = store.add_chunks(chunks)
+    for path in pending:
+        manifest.record(path)
+    manifest.save()
     typer.echo(f"stored {stored} chunks, collection now holds {store.count()}")
+
+
+@logs_app.command("stats")
+def logs_stats(
+    paths: Annotated[list[Path], typer.Argument(help="log files or directories")],
+    since: Annotated[Optional[str], typer.Option(help="ISO time or relative value such as 2h")] = None,
+    until: Annotated[str, typer.Option()] = "now",
+    top: Annotated[int, typer.Option(help="how many frequent events to list")] = 8,
+) -> None:
+    from sentinel.rag.ingest import load_records
+    from sentinel.rag.stats import compute_stats, render_stats
+    from sentinel.rag.timeparse import parse_time_argument
+
+    start = parse_time_argument(since) if since else None
+    end = parse_time_argument(until) if since else None
+    typer.echo(render_stats(compute_stats(load_records(paths), start, end, top)))
 
 
 @logs_app.command("summarize")
