@@ -1,0 +1,60 @@
+{
+  "environment": {
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13420H",
+    "logical_cores": 12,
+    "os": "Windows 11",
+    "machine": "AMD64",
+    "python": "3.12.10",
+    "onnxruntime": "1.32.0",
+    "torch": "2.15.0+cpu"
+  },
+  "settings": {
+    "image_size": 416,
+    "runs": 200,
+    "warmup": 10,
+    "threads": 4,
+    "rounds": 5
+  },
+  "results": [
+    {
+      "name": "face_yolov8n.pt (pytorch)",
+      "size_mb": 6.230011,
+      "runs": 200,
+      "mean_ms": 805.7541389978724,
+      "p50_ms": 507.3591499822214,
+      "p95_ms": 2676.196434954181,
+      "fps": 1.2410733641948324,
+      "median_fps": 1.9709903724709437
+    },
+    {
+      "name": "face-fp32.onnx",
+      "size_mb": 12.168442,
+      "runs": 200,
+      "mean_ms": 99.99114199832547,
+      "p50_ms": 88.95394997671247,
+      "p95_ms": 247.16382503975177,
+      "fps": 10.000885878638597,
+      "median_fps": 11.241771728650534
+    },
+    {
+      "name": "face-int8-dynamic.onnx",
+      "size_mb": 3.258596,
+      "runs": 200,
+      "mean_ms": 444.63582449709065,
+      "p50_ms": 395.5324499984272,
+      "p95_ms": 717.2642900142814,
+      "fps": 2.249031555500637,
+      "median_fps": 2.528237569392793
+    },
+    {
+      "name": "face-int8-static.onnx",
+      "size_mb": 3.45039,
+      "runs": 200,
+      "mean_ms": 22.28197999706026,
+      "p50_ms": 20.55354998447001,
+      "p95_ms": 32.52452000742777,
+      "fps": 44.87931503986331,
+      "median_fps": 48.65339567887722
+    }
+  ]
+}

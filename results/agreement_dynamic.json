@@ -1,0 +1,10 @@
+{
+  "images": 32,
+  "reference_faces": 40,
+  "candidate_faces": 40,
+  "matched_faces": 40,
+  "recall": 1.0,
+  "precision": 1.0,
+  "mean_iou": 0.9818875059485436,
+  "mean_score_delta": 0.009642063081264496
+}

@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "questions": 8,
+    "hit_rate": 0.875,
+    "mean_coverage": 0.9375
+  },
+  "top_k": 6,
+  "rows": [
+    {
+      "question": "Did the frame rate drop, and how low did it go?",
+      "retrieved_chunks": 3,
+      "coverage": 1.0,
+      "hit": true
+    },
+    {
+      "question": "Were there any audio or speech problems?",
+      "retrieved_chunks": 3,
+      "coverage": 1.0,
+      "hit": true
+    },
+    {
+      "question": "Did anyone enter a restricted zone?",
+      "retrieved_chunks": 4,
+      "coverage": 1.0,
+      "hit": true
+    },
+    {
+      "question": "What happened with the camera?",
+      "retrieved_chunks": 2,
+      "coverage": 1.0,
+      "hit": true
+    },
+    {
+      "question": "Were there any resource warnings in the afternoon?",
+      "retrieved_chunks": 3,
+      "coverage": 1.0,
+      "hit": true
+    },
+    {
+      "question": "How many unknown people were at the entrance in the late afternoon and what did the robot say?",
+      "retrieved_chunks": 2,
+      "coverage": 1.0,
+      "hit": true
+    },
+    {
+      "question": "Was the hardware overheating?",
+      "retrieved_chunks": 3,
+      "coverage": 1.0,
+      "hit": true
+    },
+    {
+      "question": "List the error level events of the day.",
+      "retrieved_chunks": 6,
+      "coverage": 0.5,
+      "hit": false
+    }
+  ]
+}
