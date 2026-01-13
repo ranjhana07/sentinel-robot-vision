@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Callable, Mapping, Protocol
 
 import numpy as np
@@ -51,3 +52,8 @@ class GalleryResolver:
             if score >= best_score:
                 best_name, best_score = name, score
         return best_name
+
+
+def load_gallery(path: Path | str) -> dict[str, np.ndarray]:
+    with np.load(path) as archive:
+        return {name: np.asarray(archive[name], dtype=np.float32) for name in archive.files}

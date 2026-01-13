@@ -39,3 +39,13 @@ def test_gallery_resolver_skips_empty_crop():
     resolver = GalleryResolver(lambda face: np.ones(2), {"a": np.ones(2)})
     far = Track(2, (500.0, 500.0, 560.0, 560.0), 0.9)
     assert resolver.resolve(np.zeros((100, 100, 3), dtype=np.uint8), far) is None
+
+
+def test_load_gallery_reads_named_embeddings(tmp_path):
+    from sentinel.tracking.identity import load_gallery
+
+    path = tmp_path / "gallery.npz"
+    np.savez(path, asha=np.array([1.0, 0.0]), ravi=np.array([0.0, 1.0]))
+    gallery = load_gallery(path)
+    assert sorted(gallery) == ["asha", "ravi"]
+    assert gallery["asha"].dtype == np.float32
