@@ -35,7 +35,9 @@ class OnnxFaceDetector:
         self.conf_threshold = conf_threshold
         self.iou_threshold = iou_threshold
         self.session = build_session(model_path, providers, intra_op_threads)
-        self.input_name = self.session.get_inputs()[0].name
+        model_input = self.session.get_inputs()[0]
+        self.input_name = model_input.name
+        self.input_size = static_input_size(model_input.shape, input_size)
 
     @classmethod
     def from_config(cls, config: DetectorConfig) -> "OnnxFaceDetector":
@@ -52,3 +54,12 @@ class OnnxFaceDetector:
         tensor, meta = prepare_input(frame, self.input_size)
         output = self.session.run(None, {self.input_name: tensor})[0]
         return decode_yolov8(output, meta, self.conf_threshold, self.iou_threshold)
+
+
+def static_input_size(shape: Sequence[object], requested: int) -> int:
+    height, width = shape[2], shape[3]
+    if isinstance(height, int) and isinstance(width, int):
+        if height != width:
+            raise ValueError(f"model expects a non-square input {height}x{width}")
+        return height
+    return requested
