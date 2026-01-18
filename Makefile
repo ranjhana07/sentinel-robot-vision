@@ -1,7 +1,7 @@
 PYTHON ?= python
 CONFIG ?= configs/default.yaml
 
-.PHONY: install dev test export quantize bench run eval clean
+.PHONY: install dev test export quantize bench run eval results clean
 
 install:
 	$(PYTHON) -m pip install -e .
@@ -30,3 +30,6 @@ clean:
 
 eval:
 	$(PYTHON) scripts/evaluate_logs.py --mode retrieval
+
+results:
+	WEIGHTS=models/face_yolov8n.pt CALIBRATION_DIR=data/calibration HELDOUT_DIR=data/heldout ./scripts/run_benchmarks.sh
