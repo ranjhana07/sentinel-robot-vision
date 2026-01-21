@@ -57,3 +57,21 @@ def test_two_loggers_do_not_share_handlers(tmp_path):
     second.close()
     assert len(read_lines(first.path)) == 1
     assert len(read_lines(second.path)) == 1
+
+
+def test_concurrent_writers_produce_whole_lines(tmp_path):
+    import threading
+
+    logger = RobotLogger(tmp_path, max_bytes=10_000_000)
+
+    def worker(name):
+        for index in range(200):
+            logger.log("tick", writer=name, index=index)
+
+    threads = [threading.Thread(target=worker, args=(f"t{n}",)) for n in range(4)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+    logger.close()
+    assert len(read_lines(logger.path)) == 800
