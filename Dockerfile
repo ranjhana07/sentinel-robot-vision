@@ -12,7 +12,8 @@ WORKDIR /app
 
 COPY pyproject.toml README.md ./
 COPY src ./src
-RUN pip install ".[tts]"
+ARG EXTRAS=tts
+RUN pip install ".[${EXTRAS}]"
 
 COPY configs ./configs
 
