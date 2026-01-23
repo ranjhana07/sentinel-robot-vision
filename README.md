@@ -179,3 +179,13 @@ python -m pytest
 ```
 
 The tests cover pure logic and small synthetic ONNX graphs and need no model weights, camera or network.
+
+## Docker
+
+```
+docker buildx build --platform linux/arm64 -t sentinel-robot-vision .
+docker run --rm --device /dev/snd --device /dev/video0 \
+    -v $PWD/models:/app/models -v $PWD/logs:/app/logs sentinel-robot-vision
+```
+
+Add the log tooling with `--build-arg EXTRAS=tts,rag`. Unknown faces can be saved for review with `--set snapshots.enabled=true`, which writes cropped JPEGs to `data/snapshots` and keeps the newest 200.
