@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sentinel-robot-vision"
-version = "0.2.0"
+version = "1.0.0"
 description = "Face detection and spoken responses for surveillance robots, with LLM summaries of robot logs"
 readme = "README.md"
 requires-python = ">=3.10"
